@@ -3,42 +3,42 @@ import type { Page } from "../../App";
 
 const myCourses = [
   {
-    name: "Advanced Mathematics",
-    students: 42,
-    code: "MATH401",
+    name: "Data Structures & Algorithms",
+    students: 60,
+    code: "CS301",
     schedule: "Mon/Wed 9:00 AM",
   },
   {
-    name: "Physics Lab",
-    students: 28,
-    code: "PHYS301",
-    schedule: "Tue/Thu 2:00 PM",
+    name: "Computer Networks",
+    students: 55,
+    code: "CS401",
+    schedule: "Tue/Thu 11:00 AM",
   },
   {
-    name: "Calculus I",
-    students: 35,
-    code: "MATH201",
-    schedule: "Mon/Fri 11:00 AM",
+    name: "Operating Systems",
+    students: 58,
+    code: "CS302",
+    schedule: "Mon/Fri 2:00 PM",
   },
 ];
 
 const pending = [
   {
-    assignment: "Calculus Homework #5",
-    course: "Calculus I",
-    submissions: 28,
+    assignment: "DSA Lab #3",
+    course: "Data Structures & Algorithms",
+    submissions: 52,
     due: "2 days ago",
   },
   {
-    assignment: "Lab Report 3",
-    course: "Physics Lab",
-    submissions: 22,
+    assignment: "Network Topology Assignment",
+    course: "Computer Networks",
+    submissions: 48,
     due: "3 days ago",
   },
   {
-    assignment: "Problem Set 8",
-    course: "Advanced Mathematics",
-    submissions: 35,
+    assignment: "Process Scheduling Lab",
+    course: "Operating Systems",
+    submissions: 50,
     due: "5 days ago",
   },
 ];
@@ -46,11 +46,16 @@ const pending = [
 const todayClasses = [
   {
     time: "9:00 AM",
-    course: "Advanced Mathematics",
-    room: "Room 201",
-    students: 42,
+    course: "Data Structures & Algorithms",
+    room: "Lab 301",
+    students: 60,
   },
-  { time: "11:00 AM", course: "Calculus I", room: "Room 105", students: 35 },
+  {
+    time: "11:00 AM",
+    course: "Computer Networks",
+    room: "Room 205",
+    students: 55,
+  },
   {
     time: "2:00 PM",
     course: "Office Hours",
@@ -62,12 +67,14 @@ const todayClasses = [
 export default function TeacherDashboard({
   navigate,
 }: { navigate: (p: Page) => void }) {
+  const teacherName = localStorage.getItem("eduportal_user_name") || "Teacher";
+
   return (
     <div className="space-y-6">
       <div>
         <h1 className="text-3xl font-bold text-slate-900">Teacher Dashboard</h1>
         <p className="text-slate-500 mt-1">
-          Good morning, Dr. Sarah Johnson. You have 3 classes today.
+          Good morning, {teacherName}. You have 3 classes today.
         </p>
       </div>
 
@@ -81,13 +88,13 @@ export default function TeacherDashboard({
           },
           {
             label: "Total Students",
-            value: "105",
+            value: "173",
             icon: <Users size={18} />,
             color: "bg-green-100 text-green-600",
           },
           {
             label: "Pending Grades",
-            value: "85",
+            value: "150",
             icon: <ClipboardList size={18} />,
             color: "bg-orange-100 text-orange-600",
           },
@@ -189,7 +196,7 @@ export default function TeacherDashboard({
                     </p>
                     <p className="text-xs text-slate-400">
                       {c.room}
-                      {c.students > 0 ? ` &bull; ${c.students} students` : ""}
+                      {c.students > 0 ? ` · ${c.students} students` : ""}
                     </p>
                   </div>
                 </div>

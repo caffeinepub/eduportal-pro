@@ -5,7 +5,7 @@ const features = [
   {
     icon: <BookOpen size={24} />,
     title: "Course Management",
-    desc: "Create, manage, and enroll students in courses with ease.",
+    desc: "Create, manage, and enroll students in BTech courses with ease.",
   },
   {
     icon: <Users size={24} />,
@@ -68,11 +68,11 @@ export default function Landing({ navigate }: { navigate: (p: Page) => void }) {
         }}
       >
         <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
-          The Complete Education Portal
+          The Complete BTech Student Portal
         </h1>
         <p className="text-xl text-blue-200 mb-8 max-w-2xl mx-auto">
-          Manage courses, assignments, attendance, and results -- all in one
-          place for students, teachers, and admins.
+          Manage your BTech courses, lab assignments, attendance, and exams --
+          all in one place.
         </p>
         <div className="flex items-center justify-center gap-3 flex-wrap">
           <button
@@ -119,7 +119,7 @@ export default function Landing({ navigate }: { navigate: (p: Page) => void }) {
           Ready to get started?
         </h2>
         <p className="text-slate-500 mb-6">
-          Join thousands of educators and students on EduPortal Pro.
+          Join thousands of BTech students and faculty on EduPortal Pro.
         </p>
         <div className="flex items-center justify-center gap-3 flex-wrap">
           <button
@@ -140,7 +140,7 @@ export default function Landing({ navigate }: { navigate: (p: Page) => void }) {
       </section>
 
       <footer className="py-6 px-6 border-t border-gray-100 text-center text-slate-400 text-sm">
-        &copy; 2026 EduPortal Pro. All rights reserved.
+        &copy; {new Date().getFullYear()} EduPortal Pro. All rights reserved.
       </footer>
     </div>
   );

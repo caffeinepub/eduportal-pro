@@ -1,44 +1,50 @@
-import { Bell, BookOpen, ClipboardList, TrendingUp } from "lucide-react";
+import {
+  AlertCircle,
+  Bell,
+  BookOpen,
+  ClipboardList,
+  TrendingUp,
+} from "lucide-react";
 import type { Page } from "../../App";
 
 const enrolledCourses = [
   {
-    name: "Advanced Mathematics",
-    teacher: "Dr. Sarah Johnson",
-    progress: 72,
-    grade: "A-",
+    name: "Data Structures & Algorithms",
+    teacher: "Dr. Rajesh Kumar",
+    progress: 68,
+    grade: "A",
   },
   {
-    name: "Physics Lab",
-    teacher: "Mr. James Wilson",
-    progress: 58,
+    name: "Engineering Mathematics III",
+    teacher: "Prof. Anita Sharma",
+    progress: 55,
     grade: "B+",
   },
   {
-    name: "English Literature",
-    teacher: "Ms. Emily Davis",
-    progress: 85,
-    grade: "A",
+    name: "Digital Electronics",
+    teacher: "Mr. Suresh Patel",
+    progress: 80,
+    grade: "A-",
   },
 ];
 
 const upcomingAssignments = [
   {
-    title: "Calculus Homework #6",
-    course: "Advanced Mathematics",
+    title: "DSA Lab Assignment #4",
+    course: "Data Structures & Algorithms",
     due: "Tomorrow",
     status: "pending",
   },
   {
-    title: "Lab Report 4",
-    course: "Physics Lab",
-    due: "Dec 15",
+    title: "Engineering Maths Problem Set",
+    course: "Engineering Mathematics III",
+    due: "Mar 28",
     status: "pending",
   },
   {
-    title: "Essay Draft",
-    course: "English Literature",
-    due: "Dec 18",
+    title: "Logic Gate Design Report",
+    course: "Digital Electronics",
+    due: "Mar 30",
     status: "submitted",
   },
 ];
@@ -46,14 +52,49 @@ const upcomingAssignments = [
 export default function StudentDashboard({
   navigate,
 }: { navigate: (p: Page) => void }) {
+  const pendingAssignments = upcomingAssignments.filter(
+    (a) => a.status === "pending",
+  );
+  const userName = localStorage.getItem("eduportal_user_name") || "Student";
+  const userYear = localStorage.getItem("eduportal_user_year") || "";
+  const userBranch = localStorage.getItem("eduportal_user_branch") || "";
+
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold text-slate-900">Student Dashboard</h1>
+        <h1 className="text-3xl font-bold text-slate-900">
+          Welcome, {userName}!
+        </h1>
         <p className="text-slate-500 mt-1">
-          Hello, Alex! You have 2 assignments due this week.
+          {userYear && userBranch ? `${userYear} · ${userBranch} · ` : ""}
+          You have {pendingAssignments.length} assignment
+          {pendingAssignments.length !== 1 ? "s" : ""} due this week.
         </p>
       </div>
+
+      {/* Assignment submission reminder */}
+      {pendingAssignments.length > 0 && (
+        <div className="flex items-start gap-3 bg-orange-50 border border-orange-200 rounded-xl px-5 py-4">
+          <AlertCircle size={20} className="text-orange-500 mt-0.5 shrink-0" />
+          <div className="flex-1">
+            <p className="text-sm font-semibold text-orange-700">
+              Assignment should be submitted!
+            </p>
+            <p className="text-xs text-orange-600 mt-0.5">
+              You have {pendingAssignments.length} pending assignment
+              {pendingAssignments.length > 1 ? "s" : ""}. Please submit before
+              the due date to avoid penalties.
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={() => navigate("assignments")}
+            className="text-xs font-medium text-orange-700 bg-orange-100 hover:bg-orange-200 px-3 py-1.5 rounded-lg transition-colors shrink-0"
+          >
+            View Assignments
+          </button>
+        </div>
+      )}
 
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
         {[
@@ -65,7 +106,7 @@ export default function StudentDashboard({
           },
           {
             label: "Pending Assignments",
-            value: "3",
+            value: String(pendingAssignments.length),
             icon: <ClipboardList size={18} />,
             color: "bg-orange-100 text-orange-600",
           },
@@ -157,6 +198,11 @@ export default function StudentDashboard({
                 <div>
                   <p className="text-sm font-medium text-slate-800">
                     {a.title}
+                    {a.status === "pending" && (
+                      <span className="ml-2 text-xs text-orange-500 font-normal">
+                        • Should be submitted
+                      </span>
+                    )}
                   </p>
                   <p className="text-xs text-slate-400">
                     {a.course} &bull; Due: {a.due}

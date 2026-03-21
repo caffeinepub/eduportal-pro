@@ -21,28 +21,28 @@ import type { Page } from "../../App";
 const kpis = [
   {
     label: "Total Students",
-    value: "248",
+    value: "480",
     change: "+12%",
     icon: <Users size={20} />,
     color: "text-blue-600 bg-blue-100",
   },
   {
     label: "Total Teachers",
-    value: "32",
+    value: "48",
     change: "+3%",
     icon: <BookOpen size={20} />,
     color: "text-purple-600 bg-purple-100",
   },
   {
     label: "Active Courses",
-    value: "18",
+    value: "24",
     change: "+5%",
     icon: <TrendingUp size={20} />,
     color: "text-green-600 bg-green-100",
   },
   {
     label: "Recent Enrollments",
-    value: "47",
+    value: "72",
     change: "+18%",
     icon: <UserPlus size={20} />,
     color: "text-orange-600 bg-orange-100",
@@ -66,33 +66,29 @@ const chartData = [
 ];
 
 const activities = [
-  {
-    activity: "New course created",
-    user: "Dr. Sarah Johnson",
-    time: "2 min ago",
-  },
-  { activity: "Student enrolled", user: "Alex Thompson", time: "15 min ago" },
-  {
-    activity: "Assignment submitted",
-    user: "Maria Garcia",
-    time: "32 min ago",
-  },
-  { activity: "Exam scheduled", user: "Mr. James Wilson", time: "1 hr ago" },
-  { activity: "Grade posted", user: "Ms. Emily Davis", time: "2 hr ago" },
+  { activity: "New course added", user: "Dr. Rajesh Kumar", time: "2 min ago" },
+  { activity: "Student enrolled", user: "Arjun Mehta", time: "15 min ago" },
+  { activity: "Lab report submitted", user: "Priya Nair", time: "32 min ago" },
+  { activity: "Exam scheduled", user: "Prof. Anita Sharma", time: "1 hr ago" },
+  { activity: "Grades posted", user: "Mr. Suresh Patel", time: "2 hr ago" },
 ];
 
 const recentMessages = [
   {
-    name: "Sarah Johnson",
-    msg: "Please review the new curriculum...",
-    initials: "SJ",
+    name: "Rajesh Kumar",
+    msg: "Please review the new lab curriculum...",
+    initials: "RK",
   },
   {
-    name: "Alex Thompson",
-    msg: "I have a question about the exam...",
-    initials: "AT",
+    name: "Arjun Mehta",
+    msg: "Question about the upcoming semester exam...",
+    initials: "AM",
   },
-  { name: "James Wilson", msg: "The lab materials are ready", initials: "JW" },
+  {
+    name: "Priya Nair",
+    msg: "The lab equipment is ready for use",
+    initials: "PN",
+  },
 ];
 
 interface Props {
@@ -100,12 +96,14 @@ interface Props {
 }
 
 export default function AdminDashboard({ navigate }: Props) {
+  const adminName = localStorage.getItem("eduportal_user_name") || "Admin";
+
   return (
     <div className="space-y-6">
       <div>
         <h1 className="text-3xl font-bold text-slate-900">Admin Dashboard</h1>
         <p className="text-slate-500 mt-1">
-          Welcome back! Here's an overview of your institution.
+          Welcome back, {adminName}! Here's an overview of your institution.
         </p>
       </div>
 

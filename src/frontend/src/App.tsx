@@ -10,12 +10,15 @@ import ForgotPassword from "./pages/ForgotPassword";
 import Landing from "./pages/Landing";
 import Login from "./pages/Login";
 import Messages from "./pages/Messages";
+import Notifications from "./pages/Notifications";
 import Register from "./pages/Register";
 import Results from "./pages/Results";
 import RoleSelect from "./pages/RoleSelect";
 import Settings from "./pages/Settings";
 import Students from "./pages/Students";
+import StudyMaterials from "./pages/StudyMaterials";
 import Teachers from "./pages/Teachers";
+import Timetable from "./pages/Timetable";
 import AdminDashboard from "./pages/dashboard/AdminDashboard";
 import StudentDashboard from "./pages/dashboard/StudentDashboard";
 import TeacherDashboard from "./pages/dashboard/TeacherDashboard";
@@ -36,7 +39,10 @@ export type Page =
   | "messages"
   | "settings"
   | "students"
-  | "teachers";
+  | "teachers"
+  | "timetable"
+  | "study-materials"
+  | "notifications";
 
 export type Role = "admin" | "teacher" | "student";
 
@@ -95,7 +101,8 @@ export default function App() {
     return <Landing navigate={navigate} />;
   }
 
-  if (!role) return <RoleSelect onSelect={handleRoleSelect} />;
+  if (!role)
+    return <RoleSelect onSelect={handleRoleSelect} navigate={navigate} />;
 
   const dashboardContent = () => {
     switch (page) {
@@ -121,6 +128,12 @@ export default function App() {
         return <Students navigate={navigate} />;
       case "teachers":
         return <Teachers navigate={navigate} />;
+      case "timetable":
+        return <Timetable role={role} navigate={navigate} />;
+      case "study-materials":
+        return <StudyMaterials role={role} navigate={navigate} />;
+      case "notifications":
+        return <Notifications navigate={navigate} />;
       case "settings":
         return (
           <Settings

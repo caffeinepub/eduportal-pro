@@ -5,76 +5,97 @@ import type { Page } from "../App";
 type Student = {
   id: number;
   name: string;
-  grade: string;
+  year: string;
+  branch: string;
   courses: number;
   attendance: string;
   gpa: string;
 };
 
+const YEARS = ["1st Year", "2nd Year", "3rd Year", "4th Year"];
+const BRANCHES = [
+  "CSE",
+  "ECE",
+  "ME",
+  "CE",
+  "EE",
+  "IT",
+  "Chemical",
+  "Biotechnology",
+];
+
 const initialStudents: Student[] = [
   {
     id: 1,
-    name: "Alex Thompson",
-    grade: "10th",
+    name: "Arjun Sharma",
+    year: "2nd Year",
+    branch: "CSE",
     courses: 5,
     attendance: "94%",
-    gpa: "3.7",
+    gpa: "8.7",
   },
   {
     id: 2,
-    name: "Maria Garcia",
-    grade: "10th",
+    name: "Priya Patel",
+    year: "2nd Year",
+    branch: "ECE",
     courses: 6,
     attendance: "98%",
-    gpa: "3.9",
+    gpa: "9.2",
   },
   {
     id: 3,
-    name: "James Lee",
-    grade: "11th",
+    name: "Rahul Verma",
+    year: "3rd Year",
+    branch: "ME",
     courses: 4,
     attendance: "87%",
-    gpa: "3.2",
+    gpa: "7.8",
   },
   {
     id: 4,
-    name: "Sophie Turner",
-    grade: "11th",
+    name: "Sneha Reddy",
+    year: "3rd Year",
+    branch: "CSE",
     courses: 5,
     attendance: "96%",
-    gpa: "3.8",
+    gpa: "9.0",
   },
   {
     id: 5,
-    name: "Daniel Kim",
-    grade: "9th",
+    name: "Vikram Singh",
+    year: "1st Year",
+    branch: "CE",
     courses: 5,
     attendance: "91%",
-    gpa: "3.5",
+    gpa: "8.1",
   },
   {
     id: 6,
-    name: "Emma Wilson",
-    grade: "12th",
+    name: "Ananya Gupta",
+    year: "4th Year",
+    branch: "IT",
     courses: 6,
     attendance: "99%",
-    gpa: "4.0",
+    gpa: "9.5",
   },
   {
     id: 7,
-    name: "Noah Johnson",
-    grade: "9th",
+    name: "Rohan Das",
+    year: "1st Year",
+    branch: "EE",
     courses: 4,
     attendance: "85%",
-    gpa: "3.1",
+    gpa: "7.5",
   },
   {
     id: 8,
-    name: "Olivia Brown",
-    grade: "12th",
+    name: "Meera Nair",
+    year: "4th Year",
+    branch: "CSE",
     courses: 5,
     attendance: "97%",
-    gpa: "3.8",
+    gpa: "9.1",
   },
 ];
 
@@ -83,20 +104,25 @@ export default function Students({
 }: { navigate: (p: Page) => void }) {
   const [students, setStudents] = useState<Student[]>(initialStudents);
   const [showModal, setShowModal] = useState(false);
-  const [form, setForm] = useState({ name: "", grade: "9th" });
+  const [form, setForm] = useState({
+    name: "",
+    year: "1st Year",
+    branch: "CSE",
+  });
 
   const handleAdd = () => {
     if (!form.name.trim()) return;
     const newStudent: Student = {
       id: Date.now(),
       name: form.name.trim(),
-      grade: form.grade,
+      year: form.year,
+      branch: form.branch,
       courses: 0,
       attendance: "100%",
       gpa: "N/A",
     };
     setStudents((prev) => [...prev, newStudent]);
-    setForm({ name: "", grade: "9th" });
+    setForm({ name: "", year: "1st Year", branch: "CSE" });
     setShowModal(false);
   };
 
@@ -135,7 +161,10 @@ export default function Students({
                 Name
               </th>
               <th className="px-5 py-3 text-left text-xs font-semibold text-slate-500 uppercase">
-                Grade
+                Year
+              </th>
+              <th className="px-5 py-3 text-left text-xs font-semibold text-slate-500 uppercase">
+                Branch
               </th>
               <th className="px-5 py-3 text-left text-xs font-semibold text-slate-500 uppercase">
                 Courses
@@ -144,7 +173,7 @@ export default function Students({
                 Attendance
               </th>
               <th className="px-5 py-3 text-left text-xs font-semibold text-slate-500 uppercase">
-                GPA
+                CGPA
               </th>
             </tr>
           </thead>
@@ -168,7 +197,16 @@ export default function Students({
                     </span>
                   </div>
                 </td>
-                <td className="px-5 py-3 text-sm text-slate-500">{s.grade}</td>
+                <td className="px-5 py-3">
+                  <span className="text-xs font-medium px-2 py-1 rounded-full bg-purple-100 text-purple-700">
+                    {s.year}
+                  </span>
+                </td>
+                <td className="px-5 py-3">
+                  <span className="text-xs font-medium px-2 py-1 rounded-full bg-blue-100 text-blue-700">
+                    {s.branch}
+                  </span>
+                </td>
                 <td className="px-5 py-3 text-sm text-slate-500">
                   {s.courses}
                 </td>
@@ -234,24 +272,43 @@ export default function Students({
               </div>
               <div>
                 <label
-                  htmlFor="student-grade"
+                  htmlFor="student-year"
                   className="text-sm font-medium text-slate-700 block mb-1"
                 >
-                  Grade
+                  Year
                 </label>
                 <select
-                  id="student-grade"
-                  data-ocid="students.select"
-                  value={form.grade}
+                  id="student-year"
+                  value={form.year}
                   onChange={(e) =>
-                    setForm((p) => ({ ...p, grade: e.target.value }))
+                    setForm((p) => ({ ...p, year: e.target.value }))
                   }
                   className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
-                  <option>9th</option>
-                  <option>10th</option>
-                  <option>11th</option>
-                  <option>12th</option>
+                  {YEARS.map((y) => (
+                    <option key={y}>{y}</option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <label
+                  htmlFor="student-branch"
+                  className="text-sm font-medium text-slate-700 block mb-1"
+                >
+                  Branch
+                </label>
+                <select
+                  id="student-branch"
+                  data-ocid="students.select"
+                  value={form.branch}
+                  onChange={(e) =>
+                    setForm((p) => ({ ...p, branch: e.target.value }))
+                  }
+                  className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  {BRANCHES.map((b) => (
+                    <option key={b}>{b}</option>
+                  ))}
                 </select>
               </div>
             </div>

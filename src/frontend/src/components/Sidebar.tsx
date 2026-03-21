@@ -1,8 +1,11 @@
 import {
   BarChart2,
   Bell,
+  BellRing,
   BookOpen,
+  Calendar,
   ClipboardList,
+  Download,
   FileText,
   GraduationCap,
   LayoutDashboard,
@@ -28,7 +31,13 @@ const navItems: NavItem[] = [
     page: "dashboard",
     icon: <LayoutDashboard size={18} />,
   },
+  { label: "Timetable", page: "timetable", icon: <Calendar size={18} /> },
   { label: "Courses", page: "courses", icon: <BookOpen size={18} /> },
+  {
+    label: "Study Materials",
+    page: "study-materials",
+    icon: <Download size={18} />,
+  },
   {
     label: "Assignments",
     page: "assignments",
@@ -38,6 +47,11 @@ const navItems: NavItem[] = [
   { label: "Exams", page: "exams", icon: <FileText size={18} /> },
   { label: "Results", page: "results", icon: <BarChart2 size={18} /> },
   { label: "Announcements", page: "announcements", icon: <Bell size={18} /> },
+  {
+    label: "Notifications",
+    page: "notifications",
+    icon: <BellRing size={18} />,
+  },
   { label: "Messages", page: "messages", icon: <MessageSquare size={18} /> },
   {
     label: "Students",
@@ -96,6 +110,7 @@ export default function Sidebar({ role, currentPage, navigate }: Props) {
               type="button"
               key={item.page}
               onClick={() => navigate(item.page)}
+              data-ocid={`nav.${item.page}.link`}
               className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
                 active
                   ? "bg-blue-600/60 text-white"
@@ -114,6 +129,7 @@ export default function Sidebar({ role, currentPage, navigate }: Props) {
         <button
           type="button"
           onClick={handleLogout}
+          data-ocid="nav.logout.button"
           className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-300 hover:text-white hover:bg-white/10 transition-colors"
         >
           <LogOut size={18} />

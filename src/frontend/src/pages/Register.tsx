@@ -4,6 +4,18 @@ import type { Page } from "../App";
 
 type RegRole = "student" | "teacher";
 
+const YEARS = ["1st Year", "2nd Year", "3rd Year", "4th Year"];
+const BRANCHES = [
+  "CSE",
+  "ECE",
+  "ME",
+  "CE",
+  "EE",
+  "IT",
+  "Chemical",
+  "Biotechnology",
+];
+
 export default function Register({
   navigate,
 }: { navigate: (p: Page) => void }) {
@@ -14,6 +26,8 @@ export default function Register({
     email: "",
     password: "",
     confirm: "",
+    year: "1st Year",
+    branch: "CSE",
   });
   const [submitted, setSubmitted] = useState(false);
 
@@ -24,6 +38,13 @@ export default function Register({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (form.name) {
+      localStorage.setItem("eduportal_user_name", form.name);
+    }
+    if (regRole === "student") {
+      localStorage.setItem("eduportal_user_year", form.year);
+      localStorage.setItem("eduportal_user_branch", form.branch);
+    }
     setSubmitted(true);
   };
 
@@ -144,11 +165,7 @@ export default function Register({
               </div>
             </div>
             <div
-              className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold mb-5 ${
-                regRole === "student"
-                  ? "bg-green-100 text-green-700"
-                  : "bg-blue-100 text-blue-700"
-              }`}
+              className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold mb-5 ${regRole === "student" ? "bg-green-100 text-green-700" : "bg-blue-100 text-blue-700"}`}
             >
               {regRole === "student" ? (
                 <GraduationCap size={14} />
@@ -203,26 +220,54 @@ export default function Register({
                   <input
                     id="subject"
                     type="text"
-                    placeholder="e.g. Mathematics, Science"
+                    placeholder="e.g. Mathematics, Computer Science"
                     className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
                 </div>
               )}
               {regRole === "student" && (
-                <div>
-                  <label
-                    htmlFor="grade"
-                    className="block text-sm font-medium text-slate-700 mb-1"
-                  >
-                    Grade / Class
-                  </label>
-                  <input
-                    id="grade"
-                    type="text"
-                    placeholder="e.g. Grade 10, Class A"
-                    className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  />
-                </div>
+                <>
+                  <div>
+                    <label
+                      htmlFor="year"
+                      className="block text-sm font-medium text-slate-700 mb-1"
+                    >
+                      Year
+                    </label>
+                    <select
+                      id="year"
+                      value={form.year}
+                      onChange={(e) =>
+                        setForm({ ...form, year: e.target.value })
+                      }
+                      className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    >
+                      {YEARS.map((y) => (
+                        <option key={y}>{y}</option>
+                      ))}
+                    </select>
+                  </div>
+                  <div>
+                    <label
+                      htmlFor="branch"
+                      className="block text-sm font-medium text-slate-700 mb-1"
+                    >
+                      Branch
+                    </label>
+                    <select
+                      id="branch"
+                      value={form.branch}
+                      onChange={(e) =>
+                        setForm({ ...form, branch: e.target.value })
+                      }
+                      className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    >
+                      {BRANCHES.map((b) => (
+                        <option key={b}>{b}</option>
+                      ))}
+                    </select>
+                  </div>
+                </>
               )}
               <div>
                 <label
@@ -264,11 +309,7 @@ export default function Register({
               </div>
               <button
                 type="submit"
-                className={`w-full py-3 text-white rounded-xl font-semibold transition-colors ${
-                  regRole === "student"
-                    ? "bg-green-600 hover:bg-green-700"
-                    : "bg-blue-600 hover:bg-blue-700"
-                }`}
+                className={`w-full py-3 text-white rounded-xl font-semibold transition-colors ${regRole === "student" ? "bg-green-600 hover:bg-green-700" : "bg-blue-600 hover:bg-blue-700"}`}
               >
                 Create {regRole === "student" ? "Student" : "Teacher"} Account
               </button>
