@@ -11,6 +11,7 @@ import Landing from "./pages/Landing";
 import Login from "./pages/Login";
 import Messages from "./pages/Messages";
 import Notifications from "./pages/Notifications";
+import Profile from "./pages/Profile";
 import Register from "./pages/Register";
 import Results from "./pages/Results";
 import RoleSelect from "./pages/RoleSelect";
@@ -42,7 +43,8 @@ export type Page =
   | "teachers"
   | "timetable"
   | "study-materials"
-  | "notifications";
+  | "notifications"
+  | "profile";
 
 export type Role = "admin" | "teacher" | "student";
 
@@ -134,6 +136,8 @@ export default function App() {
         return <StudyMaterials role={role} navigate={navigate} />;
       case "notifications":
         return <Notifications navigate={navigate} />;
+      case "profile":
+        return <Profile navigate={navigate} />;
       case "settings":
         return (
           <Settings

@@ -1,5 +1,6 @@
-import { Bell, Menu, Search } from "lucide-react";
-import type { Role } from "../App";
+import { Bell, BellOff, Menu, Search } from "lucide-react";
+import { useState } from "react";
+import type { Page, Role } from "../App";
 
 const roleLabels: Record<Role, string> = {
   admin: "Administrator",
@@ -7,18 +8,33 @@ const roleLabels: Record<Role, string> = {
   student: "Student",
 };
 
-const roleNames: Record<Role, string> = {
-  admin: "John Admin",
-  teacher: "Dr. Sarah Johnson",
-  student: "Alex Thompson",
-};
-
 interface Props {
   role: Role;
   onMenuClick: () => void;
+  navigate: (p: Page) => void;
 }
 
-export default function Header({ role, onMenuClick }: Props) {
+export default function Header({ role, onMenuClick, navigate }: Props) {
+  const userName =
+    localStorage.getItem("eduportal_user_name") ||
+    role.charAt(0).toUpperCase() + role.slice(1);
+  const userPhoto = localStorage.getItem("eduportal_user_photo");
+
+  const [notifEnabled, setNotifEnabled] = useState<boolean>(() => {
+    const stored = localStorage.getItem("notifications_enabled");
+    return stored === null ? true : stored === "true";
+  });
+
+  const unreadCount = Number(
+    localStorage.getItem("notifications_unread") ?? "5",
+  );
+
+  const toggleNotifications = () => {
+    const next = !notifEnabled;
+    setNotifEnabled(next);
+    localStorage.setItem("notifications_enabled", String(next));
+  };
+
   return (
     <header className="bg-white border-b border-gray-200 px-6 py-3 flex items-center justify-between flex-shrink-0">
       <div className="flex items-center gap-4">
@@ -31,9 +47,7 @@ export default function Header({ role, onMenuClick }: Props) {
         </button>
         <span className="text-slate-700 font-medium text-sm">
           Welcome,{" "}
-          <span className="font-semibold text-slate-900">
-            {roleNames[role]}
-          </span>
+          <span className="font-semibold text-slate-900">{userName}</span>
           <span className="text-slate-400 ml-1">({roleLabels[role]})</span>
         </span>
       </div>
@@ -44,16 +58,60 @@ export default function Header({ role, onMenuClick }: Props) {
         >
           <Search size={18} />
         </button>
+
+        {/* Bell button */}
         <button
           type="button"
-          className="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg transition-colors relative"
+          data-ocid="notifications.button"
+          onClick={() => navigate("notifications")}
+          className="p-2 hover:bg-slate-100 rounded-lg transition-colors relative"
+          title="View notifications"
         >
-          <Bell size={18} />
-          <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full" />
+          <Bell
+            size={18}
+            className={notifEnabled ? "text-slate-600" : "text-slate-300"}
+          />
+          {notifEnabled && unreadCount > 0 && (
+            <span className="absolute top-1 right-1 min-w-[16px] h-4 bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center px-0.5">
+              {unreadCount > 9 ? "9+" : unreadCount}
+            </span>
+          )}
         </button>
-        <div className="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-white text-sm font-semibold ml-1">
-          {roleNames[role][0]}
-        </div>
+
+        {/* Mute / unmute toggle */}
+        <button
+          type="button"
+          data-ocid="notifications.toggle"
+          onClick={toggleNotifications}
+          className={`p-2 rounded-lg transition-colors ${
+            notifEnabled
+              ? "text-slate-400 hover:text-slate-600 hover:bg-slate-100"
+              : "text-red-400 hover:text-red-600 hover:bg-red-50"
+          }`}
+          title={notifEnabled ? "Mute notifications" : "Unmute notifications"}
+        >
+          {notifEnabled ? <Bell size={16} /> : <BellOff size={16} />}
+        </button>
+
+        {/* Avatar / Profile */}
+        <button
+          type="button"
+          data-ocid="profile.button"
+          onClick={() => navigate("profile")}
+          className="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-white text-sm font-semibold ml-1 overflow-hidden hover:ring-2 hover:ring-blue-400 transition-all"
+          title="View profile"
+          style={
+            userPhoto
+              ? {
+                  backgroundImage: `url(${userPhoto})`,
+                  backgroundSize: "cover",
+                  backgroundPosition: "center",
+                }
+              : {}
+          }
+        >
+          {!userPhoto && userName[0].toUpperCase()}
+        </button>
       </div>
     </header>
   );

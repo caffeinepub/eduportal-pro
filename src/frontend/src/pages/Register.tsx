@@ -15,6 +15,7 @@ const BRANCHES = [
   "Chemical",
   "Biotechnology",
 ];
+const SEMESTERS = ["Sem 1", "Sem 2"];
 
 export default function Register({
   navigate,
@@ -28,6 +29,7 @@ export default function Register({
     confirm: "",
     year: "1st Year",
     branch: "CSE",
+    semester: "Sem 1",
   });
   const [submitted, setSubmitted] = useState(false);
 
@@ -41,9 +43,13 @@ export default function Register({
     if (form.name) {
       localStorage.setItem("eduportal_user_name", form.name);
     }
+    if (form.email) {
+      localStorage.setItem("eduportal_user_email", form.email);
+    }
     if (regRole === "student") {
       localStorage.setItem("eduportal_user_year", form.year);
       localStorage.setItem("eduportal_user_branch", form.branch);
+      localStorage.setItem("eduportal_user_semester", form.semester);
     }
     setSubmitted(true);
   };
@@ -264,6 +270,26 @@ export default function Register({
                     >
                       {BRANCHES.map((b) => (
                         <option key={b}>{b}</option>
+                      ))}
+                    </select>
+                  </div>
+                  <div>
+                    <label
+                      htmlFor="semester"
+                      className="block text-sm font-medium text-slate-700 mb-1"
+                    >
+                      Semester
+                    </label>
+                    <select
+                      id="semester"
+                      value={form.semester}
+                      onChange={(e) =>
+                        setForm({ ...form, semester: e.target.value })
+                      }
+                      className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    >
+                      {SEMESTERS.map((s) => (
+                        <option key={s}>{s}</option>
                       ))}
                     </select>
                   </div>

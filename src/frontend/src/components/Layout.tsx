@@ -49,7 +49,11 @@ export default function Layout({
 
       {/* Main area */}
       <div className="flex flex-1 flex-col overflow-hidden">
-        <Header role={role} onMenuClick={() => setSidebarOpen(!sidebarOpen)} />
+        <Header
+          role={role}
+          onMenuClick={() => setSidebarOpen(!sidebarOpen)}
+          navigate={navigate}
+        />
         <main className="flex-1 overflow-y-auto p-6">{children}</main>
       </div>
     </div>
