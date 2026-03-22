@@ -1,5 +1,5 @@
-import { ArrowLeft } from "lucide-react";
-import { useEffect, useState } from "react";
+import { ArrowLeft, LogOut } from "lucide-react";
+import { useState } from "react";
 import type { Page, Role } from "../App";
 
 const roleOptions: { value: Role; label: string }[] = [
@@ -8,58 +8,42 @@ const roleOptions: { value: Role; label: string }[] = [
   { value: "student", label: "Student" },
 ];
 
-const profileData: Record<
-  Role,
-  { name: string; email: string; phone: string }
-> = {
-  admin: {
-    name: "John Admin",
-    email: "admin@eduportal.edu",
-    phone: "+1 (555) 000-0001",
-  },
-  teacher: {
-    name: "Dr. Sarah Johnson",
-    email: "sarah.j@eduportal.edu",
-    phone: "+1 (555) 123-4567",
-  },
-  student: {
-    name: "Alex Thompson",
-    email: "alex.t@student.eduportal.edu",
-    phone: "+1 (555) 234-5678",
-  },
-};
-
 export default function Settings({
   role,
   onRoleChange,
+  onLogout,
   navigate,
 }: {
   role: Role;
   onRoleChange: (r: Role) => void;
+  onLogout: () => void;
   navigate: (p: Page) => void;
 }) {
-  const profile = profileData[role];
+  const getStoredName = () =>
+    localStorage.getItem("eduportal_user_name") ||
+    (role === "admin"
+      ? "Administrator"
+      : role === "teacher"
+        ? "Teacher"
+        : "Student");
+
   const [form, setForm] = useState({
-    name: profile.name,
-    email: profile.email,
-    phone: profile.phone,
+    name: getStoredName(),
+    email: "",
+    phone: "",
   });
   const [saved, setSaved] = useState(false);
 
-  useEffect(() => {
-    setForm({ name: profile.name, email: profile.email, phone: profile.phone });
-    setSaved(false);
-  }, [profile.name, profile.email, profile.phone]);
-
   const handleSave = () => {
+    localStorage.setItem("eduportal_user_name", form.name);
     setSaved(true);
     setTimeout(() => setSaved(false), 3000);
   };
 
-  const fields: { label: string; key: keyof typeof form }[] = [
-    { label: "Full Name", key: "name" },
-    { label: "Email", key: "email" },
-    { label: "Phone", key: "phone" },
+  const fields: { label: string; key: keyof typeof form; id: string }[] = [
+    { label: "Full Name", key: "name", id: "settings-name" },
+    { label: "Email", key: "email", id: "settings-email" },
+    { label: "Phone", key: "phone", id: "settings-phone" },
   ];
 
   return (
@@ -67,7 +51,7 @@ export default function Settings({
       <button
         type="button"
         onClick={() => navigate("dashboard")}
-        data-ocid="nav.back_button"
+        data-ocid="settings.back_button"
         className="flex items-center gap-1 text-sm text-slate-500 hover:text-slate-800 transition-colors mb-4"
       >
         <ArrowLeft size={16} /> Back to Dashboard
@@ -83,25 +67,25 @@ export default function Settings({
         </h2>
         <div className="flex items-center gap-4 mb-5">
           <div className="w-16 h-16 rounded-full bg-blue-600 text-white flex items-center justify-center text-2xl font-bold">
-            {form.name[0]}
+            {form.name[0] || "?"}
           </div>
           <div>
             <p className="font-semibold text-slate-900">{form.name}</p>
-            <p className="text-sm text-slate-400">{form.email}</p>
+            <p className="text-sm text-slate-400 capitalize">{role}</p>
           </div>
         </div>
         <div className="space-y-3">
           {fields.map((f) => (
             <div key={f.label}>
               <label
-                htmlFor={f.key}
+                htmlFor={f.id}
                 className="text-sm font-medium text-slate-700 block mb-1"
               >
                 {f.label}
               </label>
               <input
-                id={f.key}
-                data-ocid={`settings.${f.key === "name" ? "input" : f.key === "email" ? "textarea" : "input"}`}
+                id={f.id}
+                data-ocid={`settings.${f.key}.input`}
                 value={form[f.key]}
                 onChange={(e) =>
                   setForm((p) => ({ ...p, [f.key]: e.target.value }))
@@ -155,6 +139,22 @@ export default function Settings({
             </button>
           ))}
         </div>
+      </div>
+
+      <div className="bg-white rounded-xl border border-red-100 shadow-sm p-6">
+        <h2 className="font-semibold text-red-700 mb-2">Sign Out</h2>
+        <p className="text-sm text-slate-500 mb-4">
+          You will be logged out and returned to the home page.
+        </p>
+        <button
+          type="button"
+          data-ocid="settings.logout.button"
+          onClick={onLogout}
+          className="flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-lg text-sm font-medium hover:bg-red-700 transition-colors"
+        >
+          <LogOut size={15} />
+          Sign Out
+        </button>
       </div>
     </div>
   );

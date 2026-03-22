@@ -104,11 +104,16 @@ export default function Students({
 }: { navigate: (p: Page) => void }) {
   const [students, setStudents] = useState<Student[]>(initialStudents);
   const [showModal, setShowModal] = useState(false);
+  const [yearFilter, setYearFilter] = useState<"2nd Year" | "3rd Year">(
+    "2nd Year",
+  );
   const [form, setForm] = useState({
     name: "",
-    year: "1st Year",
+    year: "2nd Year",
     branch: "CSE",
   });
+
+  const filteredStudents = students.filter((s) => s.year === yearFilter);
 
   const handleAdd = () => {
     if (!form.name.trim()) return;
@@ -153,6 +158,29 @@ export default function Students({
         </button>
       </div>
 
+      {/* Year Filter Tabs */}
+      <div className="flex gap-2 mb-2">
+        {(["2nd Year", "3rd Year"] as const).map((y) => (
+          <button
+            key={y}
+            type="button"
+            data-ocid={`students.${y.replace(" ", "").toLowerCase()}.tab`}
+            onClick={() => setYearFilter(y)}
+            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+              yearFilter === y
+                ? "bg-blue-600 text-white"
+                : "bg-white border border-gray-200 text-slate-600 hover:border-blue-300"
+            }`}
+          >
+            {y}
+          </button>
+        ))}
+        <span className="ml-auto text-sm text-slate-400 self-center">
+          {filteredStudents.length} student
+          {filteredStudents.length !== 1 ? "s" : ""}
+        </span>
+      </div>
+
       <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
         <table className="w-full">
           <thead className="bg-slate-50 border-b border-gray-200">
@@ -178,7 +206,7 @@ export default function Students({
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-100">
-            {students.map((s, i) => (
+            {filteredStudents.map((s, i) => (
               <tr
                 key={s.id}
                 data-ocid={`students.item.${i + 1}`}

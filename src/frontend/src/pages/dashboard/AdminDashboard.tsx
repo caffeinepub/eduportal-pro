@@ -206,6 +206,7 @@ export default function AdminDashboard({ navigate }: Props) {
                 { label: "Enroll Student", page: "students" as Page },
                 { label: "Create Exam", page: "exams" as Page },
                 { label: "Post Announcement", page: "announcements" as Page },
+                { label: "Manage Library", page: "library" as Page },
               ].map((a) => (
                 <button
                   type="button"

@@ -1,4 +1,13 @@
-import { BookOpen, Calendar, ClipboardList, Users } from "lucide-react";
+import {
+  AlertCircle,
+  ArrowRight,
+  BookMarked,
+  BookOpen,
+  Calendar,
+  ClipboardList,
+  Clock,
+  Users,
+} from "lucide-react";
 import type { Page } from "../../App";
 
 const myCourses = [
@@ -68,6 +77,32 @@ export default function TeacherDashboard({
   navigate,
 }: { navigate: (p: Page) => void }) {
   const teacherName = localStorage.getItem("eduportal_user_name") || "Teacher";
+  const { borrowedCount, pendingFines, dueSoonBooks } = (() => {
+    const email = localStorage.getItem("eduportal_user_email") || "";
+    const userId = email.replace(/[^a-z0-9]/gi, "");
+    const issues: any[] = JSON.parse(
+      localStorage.getItem("libraryIssues") || "[]",
+    );
+    const today = new Date();
+    const myActive = issues.filter(
+      (i: any) => i.userId === userId && i.status !== "Returned",
+    );
+    const borrowedCount = myActive.length;
+    const pendingFines = myActive.reduce((s: number, i: any) => {
+      const due = new Date(i.dueDate);
+      if (today > due) {
+        const days = Math.floor((today.getTime() - due.getTime()) / 86400000);
+        return s + days * 5;
+      }
+      return s;
+    }, 0);
+    const dueSoonBooks = myActive.filter((i: any) => {
+      const due = new Date(i.dueDate);
+      const diff = (due.getTime() - today.getTime()) / 86400000;
+      return diff >= 0 && diff <= 3;
+    });
+    return { borrowedCount, pendingFines, dueSoonBooks };
+  })();
 
   return (
     <div className="space-y-6">
@@ -203,6 +238,50 @@ export default function TeacherDashboard({
               ))}
             </div>
           </div>
+        </div>
+      </div>
+
+      {/* Library Section */}
+      <div
+        className="bg-gradient-to-br from-purple-50 to-violet-100 rounded-xl border border-purple-200 shadow-sm p-5"
+        data-ocid="library.card"
+      >
+        <div className="flex items-start gap-4">
+          <div className="w-12 h-12 rounded-xl bg-purple-500 text-white flex items-center justify-center flex-shrink-0">
+            <BookMarked size={22} />
+          </div>
+          <div className="flex-1">
+            <h3 className="font-semibold text-slate-900">Library</h3>
+            <p className="text-xs text-slate-500 mt-0.5">
+              Browse and borrow books — up to 5 at a time
+            </p>
+            {borrowedCount > 0 && (
+              <p className="text-xs text-purple-700 font-medium mt-1">
+                {borrowedCount} / 5 book{borrowedCount !== 1 ? "s" : ""}{" "}
+                borrowed
+              </p>
+            )}
+            {dueSoonBooks.length > 0 && (
+              <p className="text-xs text-amber-700 font-semibold mt-1 flex items-center gap-1">
+                <Clock size={12} /> {dueSoonBooks.length} book
+                {dueSoonBooks.length > 1 ? "s" : ""} due within 3 days!
+              </p>
+            )}
+            {pendingFines > 0 && (
+              <p className="text-xs text-red-600 font-semibold mt-1 flex items-center gap-1">
+                <AlertCircle size={12} /> Outstanding fine: ₹{pendingFines}
+              </p>
+            )}
+          </div>
+          <button
+            type="button"
+            onClick={() => navigate("library")}
+            data-ocid="library.primary_button"
+            className="flex items-center gap-1.5 text-sm font-medium text-white bg-purple-600 hover:bg-purple-700 px-4 py-2 rounded-lg transition-colors flex-shrink-0"
+          >
+            Go to Library
+            <ArrowRight size={16} />
+          </button>
         </div>
       </div>
     </div>

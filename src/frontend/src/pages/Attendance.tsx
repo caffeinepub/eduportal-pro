@@ -73,8 +73,8 @@ const allRecords: AttRecord[] = [
 const btechSubjects = [
   {
     subject: "Data Structures & Algorithms",
-    total: 30,
-    present: 27,
+    total: 40,
+    present: 35,
     presentDates: [
       "Mar 1",
       "Mar 3",
@@ -87,12 +87,12 @@ const btechSubjects = [
       "Mar 19",
       "Mar 21",
     ],
-    absentDates: ["Mar 6", "Mar 13", "Mar 20"],
+    absentDates: ["Mar 6", "Mar 13", "Mar 20", "Mar 24", "Mar 27"],
   },
   {
     subject: "Computer Networks",
-    total: 28,
-    present: 24,
+    total: 38,
+    present: 30,
     presentDates: [
       "Mar 2",
       "Mar 4",
@@ -103,27 +103,21 @@ const btechSubjects = [
       "Mar 16",
       "Mar 18",
     ],
-    absentDates: ["Mar 3", "Mar 10", "Mar 17", "Mar 24"],
-  },
-  {
-    subject: "Digital Electronics",
-    total: 25,
-    present: 18,
-    presentDates: ["Mar 2", "Mar 5", "Mar 9", "Mar 12", "Mar 16", "Mar 19"],
     absentDates: [
       "Mar 3",
-      "Mar 6",
       "Mar 10",
-      "Mar 13",
       "Mar 17",
-      "Mar 20",
-      "Mar 23",
+      "Mar 24",
+      "Mar 5",
+      "Mar 12",
+      "Mar 19",
+      "Mar 26",
     ],
   },
   {
-    subject: "Engineering Mathematics III",
-    total: 32,
-    present: 30,
+    subject: "DBMS",
+    total: 36,
+    present: 32,
     presentDates: [
       "Mar 1",
       "Mar 4",
@@ -132,15 +126,9 @@ const btechSubjects = [
       "Mar 15",
       "Mar 18",
       "Mar 22",
+      "Mar 25",
     ],
-    absentDates: ["Mar 6", "Mar 13"],
-  },
-  {
-    subject: "Thermodynamics",
-    total: 20,
-    present: 17,
-    presentDates: ["Mar 3", "Mar 6", "Mar 10", "Mar 13", "Mar 17"],
-    absentDates: ["Mar 7", "Mar 14", "Mar 21"],
+    absentDates: ["Mar 6", "Mar 13", "Mar 20", "Mar 27"],
   },
 ];
 

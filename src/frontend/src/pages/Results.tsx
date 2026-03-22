@@ -5,6 +5,8 @@ import {
   BookOpen,
   Download,
   Plus,
+  Printer,
+  Send,
   TrendingUp,
   X,
 } from "lucide-react";
@@ -325,20 +327,6 @@ const RESULTS_DATA: Record<string, YearData> = {
         total: 30,
         grade: "B",
       },
-      {
-        name: "Software Engineering",
-        code: "CS304",
-        marks: 25,
-        total: 30,
-        grade: "A",
-      },
-      {
-        name: "Engineering Mathematics III",
-        code: "MA301",
-        marks: 27,
-        total: 30,
-        grade: "A",
-      },
     ],
     mid2: [
       {
@@ -369,20 +357,6 @@ const RESULTS_DATA: Record<string, YearData> = {
         total: 30,
         grade: "A",
       },
-      {
-        name: "Software Engineering",
-        code: "CS304",
-        marks: 28,
-        total: 30,
-        grade: "A+",
-      },
-      {
-        name: "Engineering Mathematics III",
-        code: "MA301",
-        marks: 24,
-        total: 30,
-        grade: "B+",
-      },
     ],
     semester: [
       {
@@ -412,20 +386,6 @@ const RESULTS_DATA: Record<string, YearData> = {
         marks: 74,
         total: 100,
         grade: "B+",
-      },
-      {
-        name: "Software Engineering",
-        code: "CS304",
-        marks: 88,
-        total: 100,
-        grade: "A",
-      },
-      {
-        name: "Engineering Mathematics III",
-        code: "MA301",
-        marks: 82,
-        total: 100,
-        grade: "A",
       },
     ],
   },
@@ -529,12 +489,27 @@ const RESULTS_DATA: Record<string, YearData> = {
   },
 };
 
+// Teacher student marks state (mid1/30, mid2/30, sem/100)
+type StudentMarks = { mid1: number; mid2: number; sem: number };
+
+const INITIAL_STUDENT_MARKS: Record<string, StudentMarks> = {
+  "Rahul Sharma": { mid1: 26, mid2: 25, sem: 85 },
+  "Priya Patel": { mid1: 24, mid2: 22, sem: 79 },
+  "Arjun Singh": { mid1: 28, mid2: 27, sem: 88 },
+  "Sneha Reddy": { mid1: 22, mid2: 24, sem: 72 },
+  "Karan Mehta": { mid1: 20, mid2: 21, sem: 65 },
+  "Deepika Verma": { mid1: 18, mid2: 19, sem: 55 },
+  "Rohan Gupta": { mid1: 29, mid2: 28, sem: 93 },
+};
+
 const TEACHER_STUDENT_DATA = [
   { name: "Rahul Sharma", rollNo: "CS301001" },
   { name: "Priya Patel", rollNo: "CS301002" },
   { name: "Arjun Singh", rollNo: "CS301003" },
   { name: "Sneha Reddy", rollNo: "CS301004" },
   { name: "Karan Mehta", rollNo: "CS301005" },
+  { name: "Deepika Verma", rollNo: "CS301006" },
+  { name: "Rohan Gupta", rollNo: "CS301007" },
 ];
 
 const SUBJECTS_3RD = [
@@ -542,20 +517,14 @@ const SUBJECTS_3RD = [
   "Computer Networks",
   "Operating Systems",
   "Database Management Systems",
-  "Software Engineering",
-  "Engineering Mathematics III",
 ];
 
-const TEACHER_MARKS: Record<
-  string,
-  { mid1: number; mid2: number; sem: number }
-> = {
-  "Rahul Sharma-DSA": { mid1: 26, mid2: 25, sem: 85 },
-  "Priya Patel-DSA": { mid1: 24, mid2: 22, sem: 79 },
-  "Arjun Singh-DSA": { mid1: 28, mid2: 27, sem: 88 },
-  "Sneha Reddy-DSA": { mid1: 22, mid2: 24, sem: 72 },
-  "Karan Mehta-DSA": { mid1: 25, mid2: 26, sem: 81 },
-};
+const CLASS_OPTIONS = [
+  "3rd Year CSE",
+  "2nd Year CSE",
+  "1st Year CSE",
+  "3rd Year ECE",
+];
 
 const ALL_YEARS = ["1st Year", "2nd Year", "3rd Year", "4th Year"];
 
@@ -598,10 +567,20 @@ function calcCGPA(yearsData: YearData[]): number {
   return Math.round(avg * 100) / 100;
 }
 
+function calcGrade(pct: number): string {
+  if (pct >= 90) return "A+";
+  if (pct >= 80) return "A";
+  if (pct >= 70) return "B+";
+  if (pct >= 60) return "B";
+  if (pct >= 50) return "C";
+  if (pct >= 35) return "D";
+  return "F";
+}
+
 function gradeColor(grade: string) {
   if (grade === "A+" || grade === "A") return "bg-green-100 text-green-700";
   if (grade === "B+" || grade === "B") return "bg-blue-100 text-blue-700";
-  if (grade === "C+" || grade === "C") return "bg-orange-100 text-orange-700";
+  if (grade === "C" || grade === "D") return "bg-orange-100 text-orange-700";
   return "bg-red-100 text-red-700";
 }
 
@@ -653,13 +632,11 @@ export default function Results({
   role,
   navigate,
 }: { role: Role; navigate: (p: Page) => void }) {
-  // Read registered year from localStorage for students
   const registeredYear =
     localStorage.getItem("eduportal_user_year") || "3rd Year";
   const userName = localStorage.getItem("eduportal_user_name") || "Student";
   const userBranch = localStorage.getItem("eduportal_user_branch") || "";
 
-  // For students: only show years up to the registered year
   const registeredYearIndex = ALL_YEARS.indexOf(registeredYear);
   const studentYears =
     role === "student"
@@ -678,6 +655,18 @@ export default function Results({
     marks: "",
   });
 
+  // Teacher view state
+  const [selectedClass, setSelectedClass] = useState(CLASS_OPTIONS[0]);
+  const [selectedSubject, setSelectedSubject] = useState(SUBJECTS_3RD[0]);
+  const [studentMarks, setStudentMarks] = useState<
+    Record<string, StudentMarks>
+  >({ ...INITIAL_STUDENT_MARKS });
+  const [editingCell, setEditingCell] = useState<{
+    name: string;
+    field: keyof StudentMarks;
+  } | null>(null);
+  const [editValue, setEditValue] = useState("");
+
   const examTabs = [
     { key: "mid1", label: "Mid 1" },
     { key: "mid2", label: "Mid 2" },
@@ -695,21 +684,69 @@ export default function Results({
   const totalMarks = subjects.reduce((s, r) => s + r.marks, 0);
   const maxMarks = subjects.reduce((s, r) => s + r.total, 0);
   const overallPct = Math.round((totalMarks / maxMarks) * 100);
-
-  // SGPA = for currently selected year's semester
   const currentSGPA = calcSGPA(RESULTS_DATA[selectedYear].semester);
-  // CGPA = cumulative across all student's years up to registered year
   const completedYearsData = studentYears.map((y) => RESULTS_DATA[y]);
   const cgpa = calcCGPA(completedYearsData);
 
-  const handleDownload = () => {
-    toast.success("Result PDF downloaded");
-  };
-
+  const handleDownload = () => toast.success("Result PDF downloaded");
   const handleAddMarks = () => {
     toast.success(`Marks added for ${addForm.student} — ${addForm.subject}`);
     setShowAddModal(false);
   };
+
+  // Teacher inline edit helpers
+  const startEdit = (
+    name: string,
+    field: keyof StudentMarks,
+    currentVal: number,
+  ) => {
+    setEditingCell({ name, field });
+    setEditValue(String(currentVal));
+  };
+
+  const commitEdit = () => {
+    if (!editingCell) return;
+    const val = Number(editValue);
+    if (!Number.isNaN(val) && val >= 0) {
+      setStudentMarks((prev) => ({
+        ...prev,
+        [editingCell.name]: {
+          ...prev[editingCell.name],
+          [editingCell.field]: val,
+        },
+      }));
+    }
+    setEditingCell(null);
+  };
+
+  // Analytics computed from studentMarks
+  const analyticsStudents = TEACHER_STUDENT_DATA.map((st) => {
+    const m = studentMarks[st.name] || { mid1: 0, mid2: 0, sem: 0 };
+    const total = m.mid1 + m.mid2 + m.sem;
+    const pct = Math.round((total / 160) * 100);
+    const grade = calcGrade(pct);
+    return { ...st, ...m, total, pct, grade };
+  });
+
+  const classAvg = Math.round(
+    analyticsStudents.reduce((s, st) => s + st.total, 0) /
+      analyticsStudents.length,
+  );
+  const passPct = Math.round(
+    (analyticsStudents.filter((st) => st.pct >= 35).length /
+      analyticsStudents.length) *
+      100,
+  );
+  const topPerformer = analyticsStudents.reduce(
+    (best, st) => (st.total > best.total ? st : best),
+    analyticsStudents[0],
+  );
+
+  // Per-subject averages (simulated)
+  const subjectAvgs = SUBJECTS_3RD.map((sub, i) => ({
+    name: sub,
+    avg: Math.round(70 + i * 3 + Math.random() * 5),
+  }));
 
   return (
     <div className="space-y-6">
@@ -763,7 +800,7 @@ export default function Results({
         </div>
       </div>
 
-      {/* Year tabs — students only see up to their registered year */}
+      {/* Year tabs */}
       <div className="flex gap-2 flex-wrap">
         {studentYears.map((y) => (
           <button
@@ -782,10 +819,9 @@ export default function Results({
         ))}
       </div>
 
-      {/* Student view */}
+      {/* ========== STUDENT VIEW ========== */}
       {role === "student" && (
         <>
-          {/* CGPA / SGPA summary */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
             <div className="bg-gradient-to-br from-blue-600 to-indigo-700 rounded-2xl p-4 text-white">
               <div className="flex items-center gap-2 mb-1">
@@ -821,7 +857,6 @@ export default function Results({
             </div>
           </div>
 
-          {/* Exam type tabs */}
           <div className="flex gap-2">
             {examTabs.map((tab) => (
               <button
@@ -840,7 +875,6 @@ export default function Results({
             ))}
           </div>
 
-          {/* Overall summary for current view */}
           <div className="flex items-center gap-4 p-4 bg-slate-50 rounded-xl border border-gray-200">
             <div className="flex-1">
               <p className="text-sm font-semibold text-slate-700">
@@ -868,7 +902,6 @@ export default function Results({
             </span>
           </div>
 
-          {/* Subject rows */}
           <div className="space-y-3">
             {subjects.map((r) => (
               <SubjectRow key={r.code} r={r} />
@@ -877,9 +910,79 @@ export default function Results({
         </>
       )}
 
-      {/* Teacher / Admin view */}
+      {/* ========== TEACHER / ADMIN VIEW ========== */}
       {(role === "teacher" || role === "admin") && (
         <>
+          {/* Toolbar */}
+          <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-4 flex flex-wrap items-end gap-4">
+            <div>
+              <label
+                htmlFor="toolbar-class"
+                className="text-xs font-semibold text-slate-500 uppercase block mb-1"
+              >
+                Class / Section
+              </label>
+              <select
+                id="toolbar-class"
+                value={selectedClass}
+                onChange={(e) => setSelectedClass(e.target.value)}
+                data-ocid="results.select"
+                className="border border-gray-200 rounded-lg px-3 py-2 text-sm min-w-[160px]"
+              >
+                {CLASS_OPTIONS.map((c) => (
+                  <option key={c}>{c}</option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label
+                htmlFor="toolbar-subject"
+                className="text-xs font-semibold text-slate-500 uppercase block mb-1"
+              >
+                Subject
+              </label>
+              <select
+                id="toolbar-subject"
+                value={selectedSubject}
+                onChange={(e) => setSelectedSubject(e.target.value)}
+                className="border border-gray-200 rounded-lg px-3 py-2 text-sm min-w-[200px]"
+              >
+                {SUBJECTS_3RD.map((s) => (
+                  <option key={s}>{s}</option>
+                ))}
+              </select>
+            </div>
+            <div className="flex gap-2 ml-auto">
+              <button
+                type="button"
+                onClick={() =>
+                  toast.success(
+                    `Results for ${selectedClass} — ${selectedSubject} published successfully!`,
+                  )
+                }
+                data-ocid="results.primary_button"
+                className="flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white rounded-lg text-sm font-medium hover:bg-emerald-700 transition-colors"
+              >
+                <Send size={14} /> Publish Results
+              </button>
+              <button
+                type="button"
+                onClick={() => toast.success("Report downloaded as PDF")}
+                data-ocid="results.secondary_button"
+                className="flex items-center gap-2 px-4 py-2 bg-slate-700 text-white rounded-lg text-sm font-medium hover:bg-slate-800 transition-colors"
+              >
+                <Download size={14} /> Download
+              </button>
+              <button
+                type="button"
+                onClick={() => toast.success("Sending to printer...")}
+                className="flex items-center gap-2 px-4 py-2 border border-gray-200 text-slate-600 rounded-lg text-sm font-medium hover:bg-gray-50 transition-colors"
+              >
+                <Printer size={14} /> Print
+              </button>
+            </div>
+          </div>
+
           {/* Exam type tabs */}
           <div className="flex gap-2">
             {examTabs.map((tab) => (
@@ -898,7 +1001,18 @@ export default function Results({
               </button>
             ))}
           </div>
-          <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-x-auto">
+
+          {/* Marks Entry Table */}
+          <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-x-auto">
+            <div className="px-4 py-3 border-b border-gray-100">
+              <h3 className="text-sm font-bold text-slate-800">
+                Marks Entry — {selectedSubject}
+              </h3>
+              <p className="text-xs text-slate-400">
+                Click any mark cell to edit. Grade and percentage
+                auto-calculate.
+              </p>
+            </div>
             <table className="w-full min-w-[700px]" data-ocid="results.table">
               <thead className="bg-slate-50 border-b border-gray-200">
                 <tr>
@@ -906,84 +1020,297 @@ export default function Results({
                     Student
                   </th>
                   <th className="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase">
-                    Subject
+                    Roll No
                   </th>
-                  <th className="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase">
-                    Mid 1
+                  <th className="px-4 py-3 text-center text-xs font-semibold text-slate-500 uppercase">
+                    Mid 1 /30
                   </th>
-                  <th className="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase">
-                    Mid 2
+                  <th className="px-4 py-3 text-center text-xs font-semibold text-slate-500 uppercase">
+                    Mid 2 /30
                   </th>
-                  <th className="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase">
-                    Semester
+                  <th className="px-4 py-3 text-center text-xs font-semibold text-slate-500 uppercase">
+                    Semester /100
                   </th>
-                  <th className="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase">
-                    Total
+                  <th className="px-4 py-3 text-center text-xs font-semibold text-slate-500 uppercase">
+                    Total /160
                   </th>
-                  <th className="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase">
+                  <th className="px-4 py-3 text-center text-xs font-semibold text-slate-500 uppercase">
+                    %
+                  </th>
+                  <th className="px-4 py-3 text-center text-xs font-semibold text-slate-500 uppercase">
                     Grade
                   </th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100">
-                {TEACHER_STUDENT_DATA.map((st, si) =>
-                  subjects.map((sub, ri) => {
-                    const key = `${st.name}-DSA`;
-                    const m = TEACHER_MARKS[key] || {
-                      mid1: 20 + ri,
-                      mid2: 22 + ri,
-                      sem: 70 + ri * 2,
-                    };
-                    const total = m.mid1 + m.mid2 + Math.round(m.sem / 10);
-                    const grade = total >= 65 ? "A" : total >= 55 ? "B+" : "B";
+                {TEACHER_STUDENT_DATA.map((st, si) => {
+                  const m = studentMarks[st.name] || {
+                    mid1: 0,
+                    mid2: 0,
+                    sem: 0,
+                  };
+                  const total = m.mid1 + m.mid2 + m.sem;
+                  const pct = Math.round((total / 160) * 100);
+                  const grade = calcGrade(pct);
+                  const rowBg =
+                    pct >= 75
+                      ? "hover:bg-green-50"
+                      : pct >= 50
+                        ? "hover:bg-orange-50"
+                        : "hover:bg-red-50";
+                  const rowBorder =
+                    pct >= 75
+                      ? "border-l-2 border-l-green-400"
+                      : pct >= 50
+                        ? "border-l-2 border-l-orange-400"
+                        : "border-l-2 border-l-red-400";
+
+                  const renderEditCell = (
+                    field: keyof StudentMarks,
+                    val: number,
+                  ) => {
+                    const isEditing =
+                      editingCell?.name === st.name &&
+                      editingCell?.field === field;
+                    return (
+                      <td className="px-4 py-3 text-center">
+                        {isEditing ? (
+                          <input
+                            type="number"
+                            value={editValue}
+                            onChange={(e) => setEditValue(e.target.value)}
+                            onBlur={commitEdit}
+                            onKeyDown={(e) => {
+                              if (e.key === "Enter") commitEdit();
+                              if (e.key === "Escape") setEditingCell(null);
+                            }}
+                            className="w-16 text-center border border-blue-400 rounded px-1 py-0.5 text-sm focus:outline-none focus:ring-1 focus:ring-blue-500"
+                          />
+                        ) : (
+                          <button
+                            type="button"
+                            onClick={() => startEdit(st.name, field, val)}
+                            className="text-sm text-slate-700 hover:text-blue-600 hover:bg-blue-50 px-2 py-0.5 rounded cursor-pointer transition-colors"
+                            title="Click to edit"
+                          >
+                            {val}
+                          </button>
+                        )}
+                      </td>
+                    );
+                  };
+
+                  return (
+                    <tr
+                      key={st.name}
+                      className={`${rowBg} ${rowBorder}`}
+                      data-ocid={`results.row.${si + 1}`}
+                    >
+                      <td className="px-4 py-3 text-sm font-medium text-slate-900">
+                        {st.name}
+                      </td>
+                      <td className="px-4 py-3 text-xs text-slate-400">
+                        {st.rollNo}
+                      </td>
+                      {renderEditCell("mid1", m.mid1)}
+                      {renderEditCell("mid2", m.mid2)}
+                      {renderEditCell("sem", m.sem)}
+                      <td className="px-4 py-3 text-center text-sm font-bold text-slate-900">
+                        {total}
+                      </td>
+                      <td className="px-4 py-3 text-center text-sm font-semibold">
+                        <span
+                          className={`px-2 py-0.5 rounded-full text-xs ${
+                            pct >= 75
+                              ? "bg-green-100 text-green-700"
+                              : pct >= 50
+                                ? "bg-orange-100 text-orange-700"
+                                : "bg-red-100 text-red-600"
+                          }`}
+                        >
+                          {pct}%
+                        </span>
+                      </td>
+                      <td className="px-4 py-3 text-center">
+                        <span
+                          className={`text-xs font-bold px-2 py-1 rounded-full ${gradeColor(grade)}`}
+                        >
+                          {grade}
+                        </span>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+
+          {/* Result Analytics Panel */}
+          <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-5">
+            <h3 className="text-base font-bold text-slate-800 mb-4">
+              📊 Result Analytics
+            </h3>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+              <div className="bg-blue-50 rounded-xl p-4 text-center">
+                <p className="text-2xl font-bold text-blue-700">
+                  {classAvg}/160
+                </p>
+                <p className="text-xs text-blue-500 mt-1">
+                  Class Average Marks
+                </p>
+              </div>
+              <div className="bg-green-50 rounded-xl p-4 text-center">
+                <p className="text-2xl font-bold text-green-700">{passPct}%</p>
+                <p className="text-xs text-green-500 mt-1">Pass Percentage</p>
+              </div>
+              <div className="bg-amber-50 rounded-xl p-4 text-center">
+                <p className="text-sm font-bold text-amber-700 truncate">
+                  {topPerformer?.name}
+                </p>
+                <p className="text-lg font-bold text-amber-600">
+                  {topPerformer?.total}/160
+                </p>
+                <p className="text-xs text-amber-500">Top Performer</p>
+              </div>
+            </div>
+            {/* Subject-wise bar chart */}
+            <div>
+              <p className="text-xs font-semibold text-slate-500 uppercase mb-3">
+                Subject-wise Class Average
+              </p>
+              <div className="space-y-2">
+                {subjectAvgs.map((s) => (
+                  <div key={s.name} className="flex items-center gap-3">
+                    <p className="text-xs text-slate-600 w-44 truncate shrink-0">
+                      {s.name}
+                    </p>
+                    <div className="flex-1 h-4 bg-gray-100 rounded-full overflow-hidden">
+                      <div
+                        className="h-full bg-blue-500 rounded-full transition-all"
+                        style={{ width: `${s.avg}%` }}
+                      />
+                    </div>
+                    <span className="text-xs font-semibold text-slate-600 w-8 text-right">
+                      {s.avg}%
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Student Performance Tracking */}
+          <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-5">
+            <h3 className="text-base font-bold text-slate-800 mb-4">
+              🧑‍🎓 Student Performance Tracking
+            </h3>
+            <div className="overflow-x-auto">
+              <table className="w-full min-w-[600px]">
+                <thead className="bg-slate-50 border-b border-gray-100">
+                  <tr>
+                    <th className="px-4 py-2 text-left text-xs font-semibold text-slate-500 uppercase">
+                      Student
+                    </th>
+                    <th className="px-4 py-2 text-center text-xs font-semibold text-slate-500 uppercase">
+                      Mid 1
+                    </th>
+                    <th className="px-4 py-2 text-center text-xs font-semibold text-slate-500 uppercase">
+                      Mid 2
+                    </th>
+                    <th className="px-4 py-2 text-center text-xs font-semibold text-slate-500 uppercase">
+                      Semester
+                    </th>
+                    <th className="px-4 py-2 text-center text-xs font-semibold text-slate-500 uppercase">
+                      Total
+                    </th>
+                    <th className="px-4 py-2 text-center text-xs font-semibold text-slate-500 uppercase">
+                      %
+                    </th>
+                    <th className="px-4 py-2 text-center text-xs font-semibold text-slate-500 uppercase">
+                      Trend
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-50">
+                  {analyticsStudents.map((st, si) => {
+                    const trend =
+                      st.mid2 > st.mid1 ? "↑" : st.mid2 < st.mid1 ? "↓" : "→";
+                    const trendColor =
+                      trend === "↑"
+                        ? "text-green-600"
+                        : trend === "↓"
+                          ? "text-red-500"
+                          : "text-slate-400";
+                    const rowBg =
+                      st.pct >= 75
+                        ? "bg-green-50/60"
+                        : st.pct >= 50
+                          ? "bg-orange-50/60"
+                          : "bg-red-50/60";
                     return (
                       <tr
-                        key={`${st.name}-${sub.code}`}
-                        className="hover:bg-slate-50"
-                        data-ocid={`results.row.${si * subjects.length + ri + 1}`}
+                        key={st.name}
+                        className={rowBg}
+                        data-ocid={`results.item.${si + 1}`}
                       >
-                        {ri === 0 && (
-                          <td
-                            className="px-4 py-3 text-sm font-medium text-slate-900"
-                            rowSpan={subjects.length}
-                          >
-                            <div>
-                              <p>{st.name}</p>
-                              <p className="text-xs text-slate-400">
-                                {st.rollNo}
-                              </p>
-                            </div>
-                          </td>
-                        )}
-                        <td className="px-4 py-3 text-sm text-slate-700">
-                          <p>{sub.name}</p>
-                          <p className="text-xs text-slate-400">{sub.code}</p>
+                        <td className="px-4 py-3 text-sm font-medium text-slate-900">
+                          <div>
+                            <p>{st.name}</p>
+                            <p className="text-xs text-slate-400">
+                              {st.rollNo}
+                            </p>
+                          </div>
                         </td>
-                        <td className="px-4 py-3 text-sm text-slate-700">
-                          {m.mid1}/30
+                        <td className="px-4 py-3 text-center text-sm text-slate-700">
+                          {st.mid1}/30
                         </td>
-                        <td className="px-4 py-3 text-sm text-slate-700">
-                          {m.mid2}/30
+                        <td className="px-4 py-3 text-center text-sm text-slate-700">
+                          {st.mid2}/30
                         </td>
-                        <td className="px-4 py-3 text-sm text-slate-700">
-                          {m.sem}/100
+                        <td className="px-4 py-3 text-center text-sm text-slate-700">
+                          {st.sem}/100
                         </td>
-                        <td className="px-4 py-3 text-sm font-semibold text-slate-900">
-                          {total}
+                        <td className="px-4 py-3 text-center text-sm font-bold text-slate-900">
+                          {st.total}
                         </td>
-                        <td className="px-4 py-3">
+                        <td className="px-4 py-3 text-center">
                           <span
-                            className={`text-xs font-bold px-2 py-1 rounded-full ${gradeColor(grade)}`}
+                            className={`text-xs font-semibold px-2 py-0.5 rounded-full ${
+                              st.pct >= 75
+                                ? "bg-green-100 text-green-700"
+                                : st.pct >= 50
+                                  ? "bg-orange-100 text-orange-700"
+                                  : "bg-red-100 text-red-600"
+                            }`}
                           >
-                            {grade}
+                            {st.pct}%
                           </span>
+                        </td>
+                        <td
+                          className={`px-4 py-3 text-center text-lg font-bold ${trendColor}`}
+                        >
+                          {trend}
                         </td>
                       </tr>
                     );
-                  }),
-                )}
-              </tbody>
-            </table>
+                  })}
+                </tbody>
+              </table>
+            </div>
+            <div className="flex gap-4 mt-3">
+              <div className="flex items-center gap-1.5">
+                <div className="w-3 h-3 rounded-full bg-green-200" />
+                <span className="text-xs text-slate-500">Above 75%</span>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <div className="w-3 h-3 rounded-full bg-orange-200" />
+                <span className="text-xs text-slate-500">50–75%</span>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <div className="w-3 h-3 rounded-full bg-red-200" />
+                <span className="text-xs text-slate-500">Below 50%</span>
+              </div>
+            </div>
           </div>
         </>
       )}

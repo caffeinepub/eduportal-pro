@@ -2,6 +2,7 @@ import {
   BarChart2,
   Bell,
   BellRing,
+  BookMarked,
   BookOpen,
   Calendar,
   ClipboardList,
@@ -16,7 +17,6 @@ import {
   Users,
 } from "lucide-react";
 import type { Page, Role } from "../App";
-import { useInternetIdentity } from "../hooks/useInternetIdentity";
 
 interface NavItem {
   label: string;
@@ -54,6 +54,12 @@ const navItems: NavItem[] = [
   },
   { label: "Messages", page: "messages", icon: <MessageSquare size={18} /> },
   {
+    label: "Library",
+    page: "library",
+    icon: <BookMarked size={18} />,
+    roles: ["student"],
+  },
+  {
     label: "Students",
     page: "students",
     icon: <Users size={18} />,
@@ -75,11 +81,11 @@ interface Props {
 }
 
 export default function Sidebar({ role, currentPage, navigate }: Props) {
-  const { clear } = useInternetIdentity();
-
   const handleLogout = () => {
     localStorage.removeItem("eduportal_role");
-    clear();
+    localStorage.removeItem("eduportal_logged_in");
+    localStorage.removeItem("eduportal_user_name");
+    window.location.reload();
   };
 
   const filtered = navItems.filter(

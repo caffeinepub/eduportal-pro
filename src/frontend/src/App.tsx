@@ -1,6 +1,5 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Layout from "./components/Layout";
-import { useInternetIdentity } from "./hooks/useInternetIdentity";
 import Announcements from "./pages/Announcements";
 import Assignments from "./pages/Assignments";
 import Attendance from "./pages/Attendance";
@@ -8,13 +7,13 @@ import Courses from "./pages/Courses";
 import Exams from "./pages/Exams";
 import ForgotPassword from "./pages/ForgotPassword";
 import Landing from "./pages/Landing";
+import Library from "./pages/Library";
 import Login from "./pages/Login";
 import Messages from "./pages/Messages";
 import Notifications from "./pages/Notifications";
 import Profile from "./pages/Profile";
 import Register from "./pages/Register";
 import Results from "./pages/Results";
-import RoleSelect from "./pages/RoleSelect";
 import Settings from "./pages/Settings";
 import Students from "./pages/Students";
 import StudyMaterials from "./pages/StudyMaterials";
@@ -44,67 +43,52 @@ export type Page =
   | "timetable"
   | "study-materials"
   | "notifications"
-  | "profile";
+  | "profile"
+  | "library";
 
 export type Role = "admin" | "teacher" | "student";
 
 export default function App() {
-  const { identity, isInitializing } = useInternetIdentity();
   const [page, setPage] = useState<Page>("landing");
   const [role, setRole] = useState<Role | null>(() => {
+    const loggedIn = localStorage.getItem("eduportal_logged_in");
+    if (!loggedIn) return null;
     return (localStorage.getItem("eduportal_role") as Role) || null;
   });
 
-  const isAuthenticated = !!identity;
-
-  const publicPages: Page[] = [
-    "landing",
-    "login",
-    "register",
-    "forgot-password",
-  ];
-
-  useEffect(() => {
-    if (!isInitializing) {
-      if (!isAuthenticated) {
-        if (!publicPages.includes(page)) setPage("landing");
-      } else if (!role) {
-        setPage("role-select");
-      } else if (publicPages.includes(page) || page === "role-select") {
-        setPage("dashboard");
-      }
-    }
-  }, [isAuthenticated, isInitializing, role, page]);
+  const isAuthenticated = !!role;
 
   const navigate = (p: Page) => setPage(p);
 
-  const handleRoleSelect = (r: Role) => {
-    localStorage.setItem("eduportal_role", r);
+  const handleLogin = (r: Role) => {
     setRole(r);
     setPage("dashboard");
   };
 
-  if (isInitializing) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-100">
-        <div className="text-center">
-          <div className="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-          <p className="text-slate-600 font-medium">Loading EduPortal Pro...</p>
-        </div>
-      </div>
-    );
-  }
+  const handleRoleSelect = (r: Role) => {
+    localStorage.setItem("eduportal_role", r);
+    localStorage.setItem("eduportal_logged_in", "true");
+    setRole(r);
+    setPage("dashboard");
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("eduportal_logged_in");
+    localStorage.removeItem("eduportal_role");
+    localStorage.removeItem("eduportal_user_name");
+    localStorage.removeItem("eduportal_roll_number");
+    setRole(null);
+    setPage("landing");
+  };
 
   if (!isAuthenticated) {
-    if (page === "login") return <Login navigate={navigate} />;
+    if (page === "login")
+      return <Login navigate={navigate} onLogin={handleLogin} />;
     if (page === "register") return <Register navigate={navigate} />;
     if (page === "forgot-password")
       return <ForgotPassword navigate={navigate} />;
     return <Landing navigate={navigate} />;
   }
-
-  if (!role)
-    return <RoleSelect onSelect={handleRoleSelect} navigate={navigate} />;
 
   const dashboardContent = () => {
     switch (page) {
@@ -138,16 +122,21 @@ export default function App() {
         return <Notifications navigate={navigate} />;
       case "profile":
         return <Profile navigate={navigate} />;
+      case "library":
+        return <Library navigate={navigate} />;
       case "settings":
         return (
           <Settings
             role={role}
             onRoleChange={handleRoleSelect}
+            onLogout={handleLogout}
             navigate={navigate}
           />
         );
       default:
-        return <AdminDashboard navigate={navigate} />;
+        if (role === "admin") return <AdminDashboard navigate={navigate} />;
+        if (role === "teacher") return <TeacherDashboard navigate={navigate} />;
+        return <StudentDashboard navigate={navigate} />;
     }
   };
 

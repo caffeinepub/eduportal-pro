@@ -233,7 +233,7 @@ const cnLabExperiments: LabExperiment[] = [
   },
 ];
 
-const osLabExperiments: LabExperiment[] = [
+const _osLabExperiments: LabExperiment[] = [
   {
     week: 1,
     name: "Linux Shell & Basic Commands",
@@ -320,7 +320,7 @@ const osLabExperiments: LabExperiment[] = [
   },
 ];
 
-const dbmsLabExperiments: LabExperiment[] = [
+const _dbmsLabExperiments: LabExperiment[] = [
   {
     week: 1,
     name: "ER Diagram & Schema Design",
@@ -624,112 +624,6 @@ const buildInitialCourses = (): Course[] => [
       references: [{ name: "Database System Concepts - Korth", url: "#" }],
     },
   },
-  {
-    id: 5,
-    name: "Software Engineering",
-    code: "CS304",
-    subject: "Computer Science",
-    teacher: "Prof. Sanjay Gupta",
-    description:
-      "Software development life cycle, requirements engineering, software design patterns, testing methodologies, project management, and agile development practices.",
-    classYear: "3rd Year CSE",
-    duration: "4 months",
-    startDate: "Feb 2026",
-    endDate: "May 2026",
-    students: 60,
-    status: "active",
-    dept: "Computer Science",
-    content: {
-      chapters: [
-        {
-          title: "Chapter 1: SDLC Models",
-          topics: ["Waterfall", "Agile", "Scrum", "Spiral Model"],
-        },
-        {
-          title: "Chapter 2: Requirements Engineering",
-          topics: ["SRS Document", "Use Cases", "User Stories"],
-        },
-        {
-          title: "Chapter 3: Design Patterns",
-          topics: ["Creational", "Structural", "Behavioral Patterns"],
-        },
-        {
-          title: "Chapter 4: Software Testing",
-          topics: ["Unit Testing", "Integration Testing", "Black/White Box"],
-        },
-      ],
-      notes: [
-        { name: "SE Module 1 - SDLC.pdf", url: "#" },
-        { name: "Design Patterns Reference.pdf", url: "#" },
-      ],
-      videos: [
-        { name: "Agile & Scrum Overview", url: "#" },
-        { name: "Software Testing Strategies", url: "#" },
-      ],
-      presentations: [{ name: "SE Design Patterns Slides.pptx" }],
-      references: [{ name: "Software Engineering - Pressman", url: "#" }],
-    },
-  },
-  {
-    id: 6,
-    name: "Engineering Mathematics III",
-    code: "MA301",
-    subject: "Mathematics",
-    teacher: "Prof. Anita Sharma",
-    description:
-      "Advanced mathematical topics for engineering students including Fourier series, Laplace transforms, partial differential equations, and complex variable theory.",
-    classYear: "3rd Year CSE",
-    duration: "5 months",
-    startDate: "Jan 2026",
-    endDate: "May 2026",
-    students: 120,
-    status: "active",
-    dept: "Mathematics",
-    content: {
-      chapters: [
-        {
-          title: "Chapter 1: Fourier Series",
-          topics: [
-            "Periodic Functions",
-            "Euler's Formulas",
-            "Half Range Series",
-          ],
-        },
-        {
-          title: "Chapter 2: Laplace Transforms",
-          topics: [
-            "Definition & Properties",
-            "Inverse Laplace",
-            "Solving ODEs",
-          ],
-        },
-        {
-          title: "Chapter 3: Partial Differential Equations",
-          topics: ["First Order PDEs", "Wave Equation", "Heat Equation"],
-        },
-        {
-          title: "Chapter 4: Complex Variables",
-          topics: [
-            "Analytic Functions",
-            "Cauchy-Riemann Equations",
-            "Contour Integration",
-          ],
-        },
-      ],
-      notes: [
-        { name: "Fourier Series Notes.pdf", url: "#" },
-        { name: "Laplace Transform Formulae.pdf", url: "#" },
-      ],
-      videos: [
-        { name: "Lecture 1: Fourier Series Intro", url: "#" },
-        { name: "Lecture 2: Laplace Transforms", url: "#" },
-      ],
-      presentations: [{ name: "MA301 Overview Slides.pptx" }],
-      references: [
-        { name: "Higher Engineering Mathematics - B.S. Grewal", url: "#" },
-      ],
-    },
-  },
   // Lab Courses
   {
     id: 7,
@@ -794,68 +688,6 @@ const buildInitialCourses = (): Course[] => [
         { name: "Cisco Networking Academy", url: "https://netacad.com" },
       ],
       labExperiments: cnLabExperiments,
-    },
-  },
-  {
-    id: 9,
-    name: "Operating Systems Lab",
-    code: "CS302L",
-    subject: "OS Lab",
-    teacher: "Prof. Anand Verma",
-    description:
-      "Practical OS lab using Linux/Ubuntu. Covers shell scripting, process management, CPU scheduling simulation, memory management, file systems, and synchronization mechanisms.",
-    classYear: "3rd Year CSE",
-    duration: "12 weeks",
-    startDate: "Jan 2026",
-    endDate: "Mar 2026",
-    students: 62,
-    status: "active",
-    dept: "Computer Science",
-    isLab: true,
-    labWeeks: 12,
-    content: {
-      chapters: [],
-      notes: [
-        { name: "OS Lab Manual CS302L.pdf", url: "#" },
-        { name: "Linux Command Reference.pdf", url: "#" },
-      ],
-      videos: [{ name: "Linux Shell Basics", url: "#" }],
-      presentations: [{ name: "OS Lab Overview.pptx" }],
-      references: [
-        { name: "Linux man pages", url: "https://man7.org/linux/man-pages/" },
-      ],
-      labExperiments: osLabExperiments,
-    },
-  },
-  {
-    id: 10,
-    name: "DBMS Lab",
-    code: "CS303L",
-    subject: "Database Lab",
-    teacher: "Dr. Priya Nair",
-    description:
-      "Practical database lab using MySQL and MongoDB. Covers SQL DDL/DML, joins, stored procedures, triggers, transactions, normalization, and NoSQL operations.",
-    classYear: "3rd Year CSE",
-    duration: "12 weeks",
-    startDate: "Jan 2026",
-    endDate: "Mar 2026",
-    students: 60,
-    status: "active",
-    dept: "Computer Science",
-    isLab: true,
-    labWeeks: 12,
-    content: {
-      chapters: [],
-      notes: [
-        { name: "DBMS Lab Manual CS303L.pdf", url: "#" },
-        { name: "SQL Quick Reference.pdf", url: "#" },
-      ],
-      videos: [{ name: "MySQL Setup & Basics", url: "#" }],
-      presentations: [{ name: "DBMS Lab Schedule.pptx" }],
-      references: [
-        { name: "MySQL Documentation", url: "https://dev.mysql.com/doc/" },
-      ],
-      labExperiments: dbmsLabExperiments,
     },
   },
 ];
@@ -969,7 +801,7 @@ export default function Courses({
         <div>
           <h1 className="text-3xl font-bold text-slate-900">Courses</h1>
           <p className="text-slate-500 mt-1">
-            3rd Year BTech CSE &mdash; {filteredCourses.length} course
+            BTech CSE &mdash; {filteredCourses.length} course
             {filteredCourses.length !== 1 ? "s" : ""} shown
           </p>
         </div>
