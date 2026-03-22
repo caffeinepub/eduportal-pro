@@ -1,45 +1,42 @@
 # EduPortal Pro
 
 ## Current State
-- Registration flow shows OTP on screen (must be hidden)
-- Library module has basic book browsing/borrowing
-- Admin dashboard has limited library management
-- No full book management CRUD (add/edit/delete)
-- No issue/return workflow with approvals
-- No fine management system
-- No overdue tracking
-- No library reports
+Library module exists with basic book categories (Academic, Reference, Competitive, GK, Literature, Journals, Digital). Students/Teachers can browse, request, and track borrowed books. Admin manages all books, issues, returns, and fines.
 
 ## Requested Changes (Diff)
 
 ### Add
-- Full library management system with role-based access:
-  1. **Book Management (Admin)**: Add/Edit/Delete books with fields: Book ID, Book Name, Author, Category, ISBN, Publisher, Quantity, Shelf Number, Status (Available/Issued)
-  2. **Book Search**: Search by Title, Author, Category, ISBN; filter by stock/quantity
-  3. **Issue Book System**: Teacher/Student requests book; Admin approves; records issue date, return date, due date; book status changes to Issued
-  4. **Issue Rules**: Student max 3 books, Teacher max 5 books; book must be available; cannot issue same book twice
-  5. **Return Book**: Record return date, update status to Available, calculate fine if late, update stock
-  6. **Fine Management**: ₹5/day late fine, lost book = full price fine, damage penalty
-  7. **Library Users Panel (Admin)**: Teacher/Student lists, issued books list, history, overdue tracking, block users
-  8. **Search & Reports**: Available/issued/overdue books, fine report, daily/monthly/stock reports
-  9. **Library Notifications**: Due date reminders, overdue alerts, book available alerts
-  10. **Role-Based Library Access**: Admin (full CRUD + approvals + reports), Teacher (search/request/return/view), Student (search/request/return/view in dashboard)
-- OTP fix: Remove OTP display from screen; show message "OTP sent to your email/phone" instead
+- 7 fully defined book categories with subcategories and metadata:
+  1. Academic Books (Textbooks, Reference books, Subject books, Lab manuals, Guides) — subjects: Mathematics, Physics, Chemistry, Computer Science, English — Used by Students & Teachers, issue allowed
+  2. Reference Books (Dictionaries, Encyclopedias, Atlases, Handbooks, Manuals) — cannot be issued, library reading only — Used by Students & Teachers
+  3. Competitive Exam Books (UPSC, SSC, Banking, Railways, State exams) — Used by Students, issue allowed
+  4. General Knowledge Books (Current affairs, GK books, Year books, Magazines) — Used by Students & Teachers, issue allowed
+  5. Story & Literature Books (Novels, Short stories, Poems, Drama, Fiction) — Used by Students, issue allowed
+  6. Journals & Magazines (Monthly magazines, Weekly journals, Research journals; e.g. Science, Technology, Education journal) — Used by Teachers & Students, limited issue
+  7. Digital Books (E-books, PDFs, Online books, Research papers) — Used by all, online access only (no physical issue)
+- Category rules enforcement:
+  - Reference Books: "No" issue — show "Library Reading Only" badge, disable borrow button
+  - Digital Books: show "Online Access" button instead of borrow
+  - Journals/Magazines: show "Limited" badge
+- Rich sample books for each category (at least 4-6 books per category)
+- Category filter tabs/sidebar in library page showing all 7 categories with icons and book counts
+- Category detail view showing subcategories and available books
+- Issue rules visible as badges on each book card (Issuable / Library Only / Online Access / Limited)
 
 ### Modify
-- Register.tsx: Remove visible OTP from UI; show "OTP has been sent to [email] and [phone]" message only
-- Library.tsx: Full rebuild with book management, issue/return workflow, fine system
-- AdminDashboard.tsx: Add library management section
-- StudentDashboard.tsx: Update library section with issued books and fine alerts
-- TeacherDashboard.tsx: Add library section for teacher book requests
+- Library dashboard to display all 7 categories as visual cards with icons, descriptions, and who can use them
+- Book browsing to filter by category and subcategory
+- Admin book management to include all 7 categories and subcategory fields
+- Student and Teacher library views to respect category-based access and issue rules
 
 ### Remove
-- OTP displayed on screen in registration
+- Old simplified category list (replace with 7 new structured categories)
 
 ## Implementation Plan
-1. Update Register.tsx - hide OTP, show sent message
-2. Create comprehensive Library.tsx with role-based views
-3. Create LibraryAdmin.tsx component for admin book/user management
-4. Update StudentDashboard library section with fine alerts
-5. Update TeacherDashboard with library section
-6. Update AdminDashboard with library management tab
+1. Define 7 category data structures with subcategories, issue rules, and user access
+2. Populate 30+ sample books across all categories with proper fields
+3. Update library dashboard with category cards grid
+4. Add category filter/tab navigation to book browsing
+5. Enforce issue rules per category (disable borrow for Reference, show Online Access for Digital)
+6. Update Admin book management with new categories and subcategory fields
+7. Keep all existing features (borrow tracking, fines, requests, returns) intact
