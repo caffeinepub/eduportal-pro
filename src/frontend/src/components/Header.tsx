@@ -98,7 +98,7 @@ export default function Header({ role, onMenuClick, navigate }: Props) {
           type="button"
           data-ocid="profile.button"
           onClick={() => navigate("profile")}
-          className="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-white text-sm font-semibold ml-1 overflow-hidden hover:ring-2 hover:ring-blue-400 transition-all"
+          className="w-8 h-8 rounded-full bg-purple-600 flex items-center justify-center text-white text-sm font-semibold ml-1 overflow-hidden hover:ring-2 hover:ring-purple-400 transition-all"
           title="View profile"
           style={
             userPhoto

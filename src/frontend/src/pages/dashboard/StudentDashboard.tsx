@@ -57,7 +57,7 @@ const statCards = [
     label: "Enrolled Courses",
     value: "5",
     icon: <BookOpen size={18} />,
-    color: "bg-blue-100 text-blue-600",
+    color: "bg-purple-100 text-purple-600",
     page: null as Page | null,
   },
   {
@@ -138,15 +138,22 @@ export default function StudentDashboard({
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold text-slate-900">
-          Welcome, {userName}!
-        </h1>
-        <p className="text-slate-500 mt-1">
-          {userYear && userBranch ? `${userYear} · ${userBranch} · ` : ""}
-          You have {pendingAssignments.length} assignment
-          {pendingAssignments.length !== 1 ? "s" : ""} due this week.
-        </p>
+      <div className="flex items-start justify-between gap-4">
+        <div>
+          <h1 className="text-3xl font-bold text-slate-900">
+            Welcome, {userName}!
+          </h1>
+          <p className="text-slate-500 mt-1">
+            {userYear && userBranch ? `${userYear} · ${userBranch} · ` : ""}
+            You have {pendingAssignments.length} assignment
+            {pendingAssignments.length !== 1 ? "s" : ""} due this week.
+          </p>
+        </div>
+        <img
+          src="/assets/generated/student-dashboard-illustration.dim_400x400.png"
+          alt="Student"
+          className="hidden lg:block w-28 h-28 object-cover rounded-2xl shadow-md flex-shrink-0"
+        />
       </div>
 
       {pendingAssignments.length > 0 && (
@@ -218,7 +225,7 @@ export default function StudentDashboard({
             <button
               type="button"
               onClick={() => navigate("courses")}
-              className="text-xs text-blue-600 hover:underline"
+              className="text-xs text-purple-600 hover:underline"
             >
               View all
             </button>
@@ -228,14 +235,14 @@ export default function StudentDashboard({
               <div key={c.name} className="px-5 py-4">
                 <div className="flex items-center justify-between mb-2">
                   <p className="font-medium text-slate-900 text-sm">{c.name}</p>
-                  <span className="text-sm font-bold text-blue-600">
+                  <span className="text-sm font-bold text-purple-600">
                     {c.grade}
                   </span>
                 </div>
                 <p className="text-xs text-slate-400 mb-2">{c.teacher}</p>
                 <div className="w-full bg-gray-100 rounded-full h-1.5">
                   <div
-                    className="bg-blue-500 h-1.5 rounded-full"
+                    className="bg-purple-500 h-1.5 rounded-full"
                     style={{ width: `${c.progress}%` }}
                   />
                 </div>
@@ -256,7 +263,7 @@ export default function StudentDashboard({
               <button
                 type="button"
                 onClick={() => navigate("assignments")}
-                className="text-xs text-blue-600 hover:underline"
+                className="text-xs text-purple-600 hover:underline"
               >
                 View all
               </button>

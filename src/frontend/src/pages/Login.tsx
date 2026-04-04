@@ -125,17 +125,19 @@ export default function Login({
   ];
 
   const inputCls =
-    "w-full bg-white/10 border border-white/20 rounded-xl px-4 py-2.5 text-white placeholder:text-white/30 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent";
+    "w-full bg-white/10 border border-white/20 rounded-xl px-4 py-2.5 text-white placeholder:text-white/30 text-sm focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent";
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 via-blue-950 to-slate-900 px-4">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 via-purple-950 to-slate-900 px-4">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
-          <div className="w-16 h-16 rounded-2xl bg-blue-500 flex items-center justify-center text-white font-bold text-3xl mx-auto mb-3 shadow-lg shadow-blue-500/30">
+          <div className="w-16 h-16 rounded-2xl bg-purple-500 flex items-center justify-center text-white font-bold text-3xl mx-auto mb-3 shadow-lg shadow-purple-500/30">
             E
           </div>
           <h1 className="text-2xl font-bold text-white">EduPortal Pro</h1>
-          <p className="text-blue-300 text-sm mt-1">Sign in to your account</p>
+          <p className="text-purple-300 text-sm mt-1">
+            Sign in to your account
+          </p>
         </div>
 
         <div className="bg-white/5 backdrop-blur border border-white/10 rounded-2xl shadow-2xl overflow-hidden">
@@ -150,8 +152,8 @@ export default function Login({
                   onClick={() => setActiveTab(tab.id)}
                   className={`flex-1 flex items-center justify-center gap-1.5 py-3.5 text-sm font-medium transition-all ${
                     activeTab === tab.id
-                      ? "bg-blue-600 text-white"
-                      : "text-blue-200 hover:bg-white/5"
+                      ? "bg-purple-600 text-white"
+                      : "text-purple-200 hover:bg-white/5"
                   }`}
                 >
                   <Icon size={15} />
@@ -169,14 +171,14 @@ export default function Login({
                 className="space-y-4"
                 data-ocid="login.student.panel"
               >
-                <p className="text-blue-200 text-xs mb-4">
+                <p className="text-purple-200 text-xs mb-4">
                   Sign in with your registered email and password.
                 </p>
 
                 <div>
                   <label
                     htmlFor="student-email"
-                    className="block text-sm font-medium text-blue-100 mb-1.5"
+                    className="block text-sm font-medium text-purple-100 mb-1.5"
                   >
                     Email Address
                   </label>
@@ -194,7 +196,7 @@ export default function Login({
                 <div>
                   <label
                     htmlFor="student-phone"
-                    className="block text-sm font-medium text-blue-100 mb-1.5"
+                    className="block text-sm font-medium text-purple-100 mb-1.5"
                   >
                     Phone Number{" "}
                     <span className="text-white/30 text-xs font-normal">
@@ -215,7 +217,7 @@ export default function Login({
                 <div>
                   <label
                     htmlFor="student-password"
-                    className="block text-sm font-medium text-blue-100 mb-1.5"
+                    className="block text-sm font-medium text-purple-100 mb-1.5"
                   >
                     Password
                   </label>
@@ -255,7 +257,7 @@ export default function Login({
                 <button
                   type="submit"
                   data-ocid="login.student.submit_button"
-                  className="w-full py-2.5 bg-blue-600 hover:bg-blue-500 text-white rounded-xl font-semibold text-sm transition-colors shadow-lg shadow-blue-600/30 mt-2"
+                  className="w-full py-2.5 bg-purple-600 hover:bg-purple-500 text-white rounded-xl font-semibold text-sm transition-colors shadow-lg shadow-purple-600/30 mt-2"
                 >
                   Sign In as Student
                 </button>
@@ -269,7 +271,7 @@ export default function Login({
                 className="space-y-4"
                 data-ocid="login.teacher.panel"
               >
-                <p className="text-blue-200 text-xs mb-4">
+                <p className="text-purple-200 text-xs mb-4">
                   Enter your name, email and portal password to access your
                   dashboard.
                 </p>
@@ -277,7 +279,7 @@ export default function Login({
                 <div>
                   <label
                     htmlFor="teacher-name"
-                    className="block text-sm font-medium text-blue-100 mb-1.5"
+                    className="block text-sm font-medium text-purple-100 mb-1.5"
                   >
                     Your Name
                   </label>
@@ -295,7 +297,7 @@ export default function Login({
                 <div>
                   <label
                     htmlFor="teacher-email"
-                    className="block text-sm font-medium text-blue-100 mb-1.5"
+                    className="block text-sm font-medium text-purple-100 mb-1.5"
                   >
                     Email Address
                   </label>
@@ -313,7 +315,7 @@ export default function Login({
                 <div>
                   <label
                     htmlFor="teacher-password"
-                    className="block text-sm font-medium text-blue-100 mb-1.5"
+                    className="block text-sm font-medium text-purple-100 mb-1.5"
                   >
                     Password
                   </label>
@@ -353,7 +355,7 @@ export default function Login({
                 <button
                   type="submit"
                   data-ocid="login.teacher.submit_button"
-                  className="w-full py-2.5 bg-blue-600 hover:bg-blue-500 text-white rounded-xl font-semibold text-sm transition-colors shadow-lg shadow-blue-600/30 mt-2"
+                  className="w-full py-2.5 bg-purple-600 hover:bg-purple-500 text-white rounded-xl font-semibold text-sm transition-colors shadow-lg shadow-purple-600/30 mt-2"
                 >
                   Sign In as Teacher
                 </button>
@@ -367,13 +369,13 @@ export default function Login({
                 className="space-y-4"
                 data-ocid="login.admin.panel"
               >
-                <p className="text-blue-200 text-xs mb-4">
+                <p className="text-purple-200 text-xs mb-4">
                   Administrator access requires the portal admin password.
                 </p>
                 <div>
                   <label
                     htmlFor="admin-password"
-                    className="block text-sm font-medium text-blue-100 mb-1.5"
+                    className="block text-sm font-medium text-purple-100 mb-1.5"
                   >
                     Admin Password
                   </label>
@@ -407,7 +409,7 @@ export default function Login({
                 <button
                   type="submit"
                   data-ocid="login.admin.submit_button"
-                  className="w-full py-2.5 bg-blue-600 hover:bg-blue-500 text-white rounded-xl font-semibold text-sm transition-colors shadow-lg shadow-blue-600/30 mt-2"
+                  className="w-full py-2.5 bg-purple-600 hover:bg-purple-500 text-white rounded-xl font-semibold text-sm transition-colors shadow-lg shadow-purple-600/30 mt-2"
                 >
                   Sign In as Admin
                 </button>
@@ -418,7 +420,7 @@ export default function Login({
               <button
                 type="button"
                 onClick={() => navigate("forgot-password")}
-                className="text-blue-400 hover:text-blue-300 hover:underline"
+                className="text-purple-400 hover:text-purple-300 hover:underline"
               >
                 Forgot password?
               </button>
@@ -438,7 +440,7 @@ export default function Login({
           type="button"
           data-ocid="login.back.link"
           onClick={() => navigate("landing")}
-          className="mt-5 w-full text-center text-sm text-blue-300/60 hover:text-blue-300 flex items-center justify-center gap-1 transition-colors"
+          className="mt-5 w-full text-center text-sm text-purple-300/60 hover:text-purple-300 flex items-center justify-center gap-1 transition-colors"
         >
           <ArrowLeft size={13} /> Back to home
         </button>

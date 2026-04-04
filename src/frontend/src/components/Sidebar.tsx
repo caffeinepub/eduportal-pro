@@ -95,12 +95,12 @@ export default function Sidebar({ role, currentPage, navigate }: Props) {
     <div
       className="flex flex-col h-full text-white"
       style={{
-        background: "linear-gradient(180deg, #0F2743 0%, #183B63 100%)",
+        background: "linear-gradient(180deg, #1E0A3C 0%, #3B0764 100%)",
       }}
     >
       {/* Logo */}
       <div className="flex items-center gap-3 px-5 py-5 border-b border-white/10">
-        <div className="w-9 h-9 rounded-lg bg-blue-500 flex items-center justify-center font-bold text-lg flex-shrink-0">
+        <div className="w-9 h-9 rounded-lg bg-purple-500 flex items-center justify-center font-bold text-lg flex-shrink-0">
           E
         </div>
         <span className="font-bold text-lg tracking-tight">EduPortal Pro</span>
@@ -118,7 +118,7 @@ export default function Sidebar({ role, currentPage, navigate }: Props) {
               data-ocid={`nav.${item.page}.link`}
               className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
                 active
-                  ? "bg-blue-600/60 text-white"
+                  ? "bg-purple-600/60 text-white"
                   : "text-slate-300 hover:text-white hover:bg-white/10"
               }`}
             >

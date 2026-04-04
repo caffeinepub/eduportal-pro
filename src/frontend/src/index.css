@@ -14,49 +14,49 @@
   :root {
     --radius: 0.625rem;
 
-    /* ── EduPortal Pro: Clean Professional Blue ── */
-    --background: 0.975 0.005 250; /* warm off-white */
-    --foreground: 0.2 0.02 250; /* near-black with blue cast */
+    /* ── EduPortal Pro: Rich Purple Theme ── */
+    --background: 0.975 0.005 307; /* warm off-white with purple cast */
+    --foreground: 0.2 0.02 307; /* near-black with purple cast */
 
     --card: 1 0 0; /* pure white cards */
-    --card-foreground: 0.2 0.02 250;
+    --card-foreground: 0.2 0.02 307;
 
     --popover: 1 0 0;
-    --popover-foreground: 0.2 0.02 250;
+    --popover-foreground: 0.2 0.02 307;
 
-    --primary: 0.5 0.18 258; /* vibrant blue */
+    --primary: 0.5 0.22 307; /* vibrant purple */
     --primary-foreground: 1 0 0;
 
-    --secondary: 0.945 0.01 255; /* light blue-gray */
-    --secondary-foreground: 0.3 0.04 258;
+    --secondary: 0.945 0.01 307; /* light purple-gray */
+    --secondary-foreground: 0.3 0.04 307;
 
-    --muted: 0.955 0.008 250;
-    --muted-foreground: 0.52 0.02 250;
+    --muted: 0.955 0.008 307;
+    --muted-foreground: 0.52 0.02 307;
 
-    --accent: 0.935 0.025 258; /* soft blue accent */
-    --accent-foreground: 0.35 0.1 258;
+    --accent: 0.935 0.025 307; /* soft purple accent */
+    --accent-foreground: 0.35 0.1 307;
 
     --destructive: 0.577 0.245 27.325;
     --destructive-foreground: 1 0 0;
 
-    --border: 0.9 0.008 250;
-    --input: 0.9 0.008 250;
-    --ring: 0.5 0.18 258;
+    --border: 0.9 0.008 307;
+    --input: 0.9 0.008 307;
+    --ring: 0.5 0.22 307;
 
-    --chart-1: 0.55 0.2 258; /* blue */
+    --chart-1: 0.55 0.22 307; /* purple */
     --chart-2: 0.58 0.17 162; /* teal */
     --chart-3: 0.65 0.2 30; /* amber */
-    --chart-4: 0.55 0.18 300; /* purple */
+    --chart-4: 0.55 0.18 300; /* violet */
     --chart-5: 0.62 0.22 145; /* green */
 
-    --sidebar: 0.12 0.04 258; /* deep navy sidebar */
-    --sidebar-foreground: 0.92 0.01 250;
-    --sidebar-primary: 0.5 0.18 258;
+    --sidebar: 0.1 0.06 307; /* deep dark purple sidebar */
+    --sidebar-foreground: 0.92 0.01 307;
+    --sidebar-primary: 0.5 0.22 307;
     --sidebar-primary-foreground: 1 0 0;
-    --sidebar-accent: 0.18 0.05 260;
-    --sidebar-accent-foreground: 0.92 0.01 250;
-    --sidebar-border: 0.25 0.04 260;
-    --sidebar-ring: 0.5 0.18 258;
+    --sidebar-accent: 0.18 0.07 307;
+    --sidebar-accent-foreground: 0.92 0.01 307;
+    --sidebar-border: 0.25 0.06 307;
+    --sidebar-ring: 0.5 0.22 307;
 
     /* ── Success / Warning / Info ── */
     --success: 0.58 0.18 145;
@@ -68,38 +68,38 @@
   }
 
   .dark {
-    --background: 0.14 0.02 258;
-    --foreground: 0.96 0.005 250;
-    --card: 0.18 0.025 258;
-    --card-foreground: 0.96 0.005 250;
-    --popover: 0.22 0.03 258;
-    --popover-foreground: 0.96 0.005 250;
-    --primary: 0.58 0.2 258;
+    --background: 0.14 0.02 307;
+    --foreground: 0.96 0.005 307;
+    --card: 0.18 0.025 307;
+    --card-foreground: 0.96 0.005 307;
+    --popover: 0.22 0.03 307;
+    --popover-foreground: 0.96 0.005 307;
+    --primary: 0.58 0.22 307;
     --primary-foreground: 0.96 0 0;
-    --secondary: 0.24 0.03 258;
-    --secondary-foreground: 0.96 0.005 250;
-    --muted: 0.22 0.025 258;
-    --muted-foreground: 0.62 0.015 255;
-    --accent: 0.28 0.06 258;
-    --accent-foreground: 0.92 0.01 250;
+    --secondary: 0.24 0.03 307;
+    --secondary-foreground: 0.96 0.005 307;
+    --muted: 0.22 0.025 307;
+    --muted-foreground: 0.62 0.015 307;
+    --accent: 0.28 0.06 307;
+    --accent-foreground: 0.92 0.01 307;
     --destructive: 0.65 0.22 25;
     --destructive-foreground: 0.15 0 0;
     --border: 1 0 0 / 10%;
     --input: 1 0 0 / 12%;
-    --ring: 0.58 0.2 258;
-    --chart-1: 0.58 0.22 258;
+    --ring: 0.58 0.22 307;
+    --chart-1: 0.58 0.22 307;
     --chart-2: 0.62 0.18 162;
     --chart-3: 0.72 0.2 55;
     --chart-4: 0.62 0.2 300;
     --chart-5: 0.65 0.22 145;
-    --sidebar: 0.12 0.04 258;
-    --sidebar-foreground: 0.92 0.01 250;
-    --sidebar-primary: 0.58 0.2 258;
+    --sidebar: 0.1 0.06 307;
+    --sidebar-foreground: 0.92 0.01 307;
+    --sidebar-primary: 0.58 0.22 307;
     --sidebar-primary-foreground: 0.96 0 0;
-    --sidebar-accent: 0.2 0.04 260;
-    --sidebar-accent-foreground: 0.92 0.01 250;
+    --sidebar-accent: 0.2 0.07 307;
+    --sidebar-accent-foreground: 0.92 0.01 307;
     --sidebar-border: 1 0 0 / 10%;
-    --sidebar-ring: 0.55 0.18 258;
+    --sidebar-ring: 0.55 0.22 307;
   }
 
   * {

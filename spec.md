@@ -1,42 +1,41 @@
 # EduPortal Pro
 
 ## Current State
-Library module exists with basic book categories (Academic, Reference, Competitive, GK, Literature, Journals, Digital). Students/Teachers can browse, request, and track borrowed books. Admin manages all books, issues, returns, and fines.
+The app uses a blue color scheme throughout:
+- Sidebar: dark navy blue gradient (#0F2743 → #183B63)
+- Header: white with blue accents
+- Primary color: blue-600 (#2563EB)
+- Landing page: blue gradient hero section
+- Login page: dark blue gradient background
+- All buttons, icons, progress bars, stat cards: blue variants
+- No images currently used
 
 ## Requested Changes (Diff)
 
 ### Add
-- 7 fully defined book categories with subcategories and metadata:
-  1. Academic Books (Textbooks, Reference books, Subject books, Lab manuals, Guides) — subjects: Mathematics, Physics, Chemistry, Computer Science, English — Used by Students & Teachers, issue allowed
-  2. Reference Books (Dictionaries, Encyclopedias, Atlases, Handbooks, Manuals) — cannot be issued, library reading only — Used by Students & Teachers
-  3. Competitive Exam Books (UPSC, SSC, Banking, Railways, State exams) — Used by Students, issue allowed
-  4. General Knowledge Books (Current affairs, GK books, Year books, Magazines) — Used by Students & Teachers, issue allowed
-  5. Story & Literature Books (Novels, Short stories, Poems, Drama, Fiction) — Used by Students, issue allowed
-  6. Journals & Magazines (Monthly magazines, Weekly journals, Research journals; e.g. Science, Technology, Education journal) — Used by Teachers & Students, limited issue
-  7. Digital Books (E-books, PDFs, Online books, Research papers) — Used by all, online access only (no physical issue)
-- Category rules enforcement:
-  - Reference Books: "No" issue — show "Library Reading Only" badge, disable borrow button
-  - Digital Books: show "Online Access" button instead of borrow
-  - Journals/Magazines: show "Limited" badge
-- Rich sample books for each category (at least 4-6 books per category)
-- Category filter tabs/sidebar in library page showing all 7 categories with icons and book counts
-- Category detail view showing subcategories and available books
-- Issue rules visible as badges on each book card (Issuable / Library Only / Online Access / Limited)
+- Hero banner image on Landing page (`/assets/generated/hero-banner.dim_1200x500.jpg`)
+- Student dashboard illustration (`/assets/generated/student-dashboard-illustration.dim_400x400.png`) as a welcome visual in StudentDashboard
+- Library banner image (`/assets/generated/library-banner.dim_800x300.jpg`) at top of Library page
+- Purple color theme throughout (vibrant medium purple: #7C3AED as primary)
 
 ### Modify
-- Library dashboard to display all 7 categories as visual cards with icons, descriptions, and who can use them
-- Book browsing to filter by category and subcategory
-- Admin book management to include all 7 categories and subcategory fields
-- Student and Teacher library views to respect category-based access and issue rules
+- `index.css`: Change OKLCH color tokens from blue hue (258) to purple hue (~300-310). Sidebar background from dark navy to deep purple. Primary from blue to purple.
+- `Landing.tsx`: Replace blue gradient hero with purple gradient, add hero banner image, swap all blue color classes to purple
+- `Login.tsx`: Swap dark blue gradient background for dark purple gradient, change active tabs and buttons from blue to purple
+- `Sidebar.tsx`: Change gradient from dark navy to deep purple (#1E0A3C → #3B0764 or similar), active nav item from blue to purple
+- `Header.tsx`: Avatar bg from blue-600 to purple-600, notification badge stays red
+- `StudentDashboard.tsx`: Add student illustration image in welcome section, change blue accents to purple
+- `Layout.tsx`: Change bg-slate-100 to a subtle purple-tinted background
 
 ### Remove
-- Old simplified category list (replace with 7 new structured categories)
+- All blue-600/blue-700/blue-500 hardcoded Tailwind classes (replace with purple equivalents)
 
 ## Implementation Plan
-1. Define 7 category data structures with subcategories, issue rules, and user access
-2. Populate 30+ sample books across all categories with proper fields
-3. Update library dashboard with category cards grid
-4. Add category filter/tab navigation to book browsing
-5. Enforce issue rules per category (disable borrow for Reference, show Online Access for Digital)
-6. Update Admin book management with new categories and subcategory fields
-7. Keep all existing features (borrow tracking, fines, requests, returns) intact
+1. Update `index.css` OKLCH tokens: shift primary hue from 258 (blue) to 307 (purple), sidebar from navy to deep purple
+2. Update `Landing.tsx`: purple gradient hero, add hero banner image, all button/accent colors to purple
+3. Update `Login.tsx`: dark purple gradient bg, purple tabs/buttons
+4. Update `Sidebar.tsx`: deep purple gradient bg, purple active state
+5. Update `Header.tsx`: purple avatar, purple ring on hover
+6. Update `StudentDashboard.tsx`: add illustration image in welcome card, purple accents
+7. Update `Layout.tsx`: subtle purple-tinted bg
+8. Keep all functional logic, routing, data display, and existing features exactly as-is -- design only

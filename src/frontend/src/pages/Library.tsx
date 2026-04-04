@@ -773,6 +773,12 @@ export default function Library({
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 p-4 md:p-6">
       <div className="max-w-7xl mx-auto space-y-6">
+        <img
+          src="/assets/generated/library-banner.dim_800x300.jpg"
+          alt="Library"
+          className="w-full rounded-2xl object-cover mb-6"
+          style={{ maxHeight: "200px" }}
+        />
         {/* Header */}
         <div className="flex items-center gap-3">
           <Button
