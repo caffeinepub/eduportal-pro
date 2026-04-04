@@ -825,6 +825,7 @@ function AdminLibrary() {
   const [issues, setIssues] = useState<IssueRecord[]>(getIssues);
   const [activeTab, setActiveTab] = useState("overview");
   const [search, setSearch] = useState("");
+  const [adminInputValue, setAdminInputValue] = useState("");
   const [catFilter, setCatFilter] = useState("All");
   const [subcatFilter, setSubcatFilter] = useState("All");
   const [bookFormOpen, setBookFormOpen] = useState(false);
@@ -1140,18 +1141,30 @@ function AdminLibrary() {
         {/* BOOKS TAB */}
         <TabsContent value="books" className="mt-4 space-y-4">
           <div className="flex flex-col sm:flex-row gap-3 items-start sm:items-center justify-between">
-            <div className="relative w-full sm:w-80">
-              <Search
-                size={16}
-                className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
-              />
-              <Input
-                data-ocid="library.search_input"
-                placeholder="Search by title, author, ISBN…"
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                className="pl-9"
-              />
+            <div className="flex gap-2 items-center w-full sm:w-auto">
+              <div className="relative w-full sm:w-80">
+                <Search
+                  size={16}
+                  className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
+                />
+                <Input
+                  data-ocid="library.search_input"
+                  placeholder="Search by title, author, ISBN…"
+                  value={adminInputValue}
+                  onChange={(e) => setAdminInputValue(e.target.value)}
+                  onKeyDown={(e) =>
+                    e.key === "Enter" && setSearch(adminInputValue)
+                  }
+                  className="pl-9"
+                />
+              </div>
+              <Button
+                data-ocid="library.search_input.button"
+                onClick={() => setSearch(adminInputValue)}
+                className="shrink-0"
+              >
+                <Search size={16} className="mr-1" /> Search
+              </Button>
             </div>
             <div className="flex gap-2 flex-wrap">
               <Select
@@ -1923,6 +1936,7 @@ function UserLibrary({
   const [books, setBooks] = useState<LibraryBook[]>(getBooks);
   const [issues, setIssues] = useState<IssueRecord[]>(getIssues);
   const [search, setSearch] = useState("");
+  const [userInputValue, setUserInputValue] = useState("");
   const [activeView, setActiveView] = useState<"overview" | "browse">(
     "overview",
   );
@@ -2240,11 +2254,21 @@ function UserLibrary({
               <Input
                 data-ocid="library.search_input"
                 placeholder="Search books by title, author, ISBN…"
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
+                value={userInputValue}
+                onChange={(e) => setUserInputValue(e.target.value)}
+                onKeyDown={(e) =>
+                  e.key === "Enter" && setSearch(userInputValue)
+                }
                 className="pl-9"
               />
             </div>
+            <Button
+              data-ocid="library.search_input.button"
+              onClick={() => setSearch(userInputValue)}
+              className="shrink-0"
+            >
+              <Search size={16} className="mr-1" /> Search
+            </Button>
           </div>
 
           {/* Category Tabs */}
