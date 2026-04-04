@@ -2,6 +2,7 @@ import {
   ArrowLeft,
   BookOpen,
   CheckCircle,
+  Copy,
   Eye,
   EyeOff,
   GraduationCap,
@@ -64,7 +65,6 @@ function PasswordStrengthIndicator({ password }: { password: string }) {
 
   return (
     <div className="mt-2 space-y-2">
-      {/* Strength bars */}
       <div className="flex gap-1">
         {[0, 1, 2, 3].map((i) => (
           <div
@@ -75,7 +75,6 @@ function PasswordStrengthIndicator({ password }: { password: string }) {
           />
         ))}
       </div>
-      {/* Hints */}
       <div className="flex flex-wrap gap-x-3 gap-y-0.5">
         {hints.map((h) => (
           <span
@@ -128,6 +127,7 @@ export default function Register({
   const [otpInput, setOtpInput] = useState("");
   const [otpError, setOtpError] = useState("");
   const [otpResent, setOtpResent] = useState(false);
+  const [otpCopied, setOtpCopied] = useState(false);
 
   const handleChoose = (r: RegRole) => {
     setRegRole(r);
@@ -142,7 +142,6 @@ export default function Register({
     if (!form.email.trim() || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(form.email))
       return setFormError("A valid email address is required.");
 
-    // Duplicate email check
     const existingAccounts: any[] = JSON.parse(
       localStorage.getItem("eduportal_accounts") || "[]",
     );
@@ -176,6 +175,7 @@ export default function Register({
     setOtpInput("");
     setOtpError("");
     setOtpResent(false);
+    setOtpCopied(false);
     setStep("otp");
   };
 
@@ -185,7 +185,15 @@ export default function Register({
     setOtpInput("");
     setOtpError("");
     setOtpResent(true);
+    setOtpCopied(false);
     setTimeout(() => setOtpResent(false), 3000);
+  };
+
+  const handleCopyOtp = () => {
+    navigator.clipboard.writeText(otp).then(() => {
+      setOtpCopied(true);
+      setTimeout(() => setOtpCopied(false), 2000);
+    });
   };
 
   const handleVerifyOtp = (e: React.FormEvent) => {
@@ -219,7 +227,6 @@ export default function Register({
       localStorage.setItem("eduportal_user_branch", form.branch);
       localStorage.setItem("eduportal_user_semester", form.semester);
     }
-    // Call onLogin to update App state and navigate to dashboard
     onLogin(regRole);
   };
 
@@ -245,30 +252,47 @@ export default function Register({
                 Verify Your Identity
               </h1>
               <p className="text-slate-500 text-sm">
-                OTP has been sent to your email &amp; phone
+                Use the OTP below to complete registration
               </p>
             </div>
           </div>
 
-          {/* OTP sent notification */}
+          {/* OTP Display Box */}
           <div
-            data-ocid="register.otp.sent_panel"
-            className="bg-green-50 border border-green-200 rounded-xl px-5 py-4 mb-6 text-center"
+            data-ocid="register.otp.display_panel"
+            className="bg-amber-50 border-2 border-amber-400 rounded-xl px-5 py-4 mb-5 text-center"
           >
-            <div className="flex items-center justify-center gap-2 mb-1">
-              <ShieldCheck size={18} className="text-green-600" />
-              <span className="text-green-700 text-sm font-semibold">
-                OTP Sent Successfully
+            <div className="flex items-center justify-center gap-2 mb-2">
+              <ShieldCheck size={18} className="text-amber-600" />
+              <span className="text-amber-700 text-sm font-semibold">
+                Your One-Time Password (OTP)
               </span>
             </div>
-            <p className="text-slate-600 text-sm">
-              A 6-digit OTP has been sent to
+            <p className="text-3xl font-mono font-bold tracking-[0.3em] text-amber-800 my-2">
+              {otp}
             </p>
-            <p className="text-slate-800 font-medium text-sm mt-0.5">
-              {form.email}
+            <button
+              type="button"
+              onClick={handleCopyOtp}
+              className="inline-flex items-center gap-1.5 mt-1 px-3 py-1.5 bg-amber-100 hover:bg-amber-200 text-amber-700 text-xs font-medium rounded-lg transition-colors"
+            >
+              <Copy size={12} />
+              {otpCopied ? "Copied!" : "Copy OTP"}
+            </button>
+            <p className="text-amber-600 text-xs mt-2">
+              Since real email/SMS delivery is not active, use this code to
+              verify.
+            </p>
+          </div>
+
+          {/* Sent to info */}
+          <div className="bg-green-50 border border-green-200 rounded-xl px-4 py-3 mb-5 text-center">
+            <p className="text-slate-600 text-sm">
+              Would be sent to{" "}
+              <span className="font-medium text-slate-800">{form.email}</span>
             </p>
             <p className="text-slate-500 text-xs mt-0.5">
-              and phone number ending in ****{form.phone.slice(-4)}
+              and phone ending in ****{form.phone.slice(-4)}
             </p>
           </div>
 
@@ -282,7 +306,7 @@ export default function Register({
                 htmlFor="otp-input"
                 className="block text-sm font-medium text-slate-700 mb-2 text-center"
               >
-                Enter the 6-digit OTP sent to your email/phone
+                Enter the 6-digit OTP above
               </label>
               <input
                 id="otp-input"
@@ -311,7 +335,7 @@ export default function Register({
                 data-ocid="register.otp.success_state"
                 className="text-green-600 text-sm bg-green-50 border border-green-200 rounded-lg px-3 py-2 text-center"
               >
-                A new OTP has been sent to your email &amp; phone.
+                A new OTP has been generated above.
               </p>
             )}
 
@@ -330,7 +354,7 @@ export default function Register({
                 data-ocid="register.otp.resend_button"
                 className="inline-flex items-center gap-1.5 text-indigo-600 hover:text-indigo-800 text-sm font-medium hover:underline transition-colors"
               >
-                <RefreshCw size={13} /> Resend OTP
+                <RefreshCw size={13} /> Generate New OTP
               </button>
             </div>
           </form>
@@ -690,7 +714,7 @@ export default function Register({
 
               <p className="text-center text-xs text-slate-400 flex items-center justify-center gap-1">
                 <CheckCircle size={12} className="text-green-500" />
-                OTP verification will be sent to your email &amp; phone
+                OTP verification will be shown on the next screen
               </p>
             </form>
           </div>
