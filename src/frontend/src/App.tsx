@@ -84,7 +84,8 @@ export default function App() {
   if (!isAuthenticated) {
     if (page === "login")
       return <Login navigate={navigate} onLogin={handleLogin} />;
-    if (page === "register") return <Register navigate={navigate} />;
+    if (page === "register")
+      return <Register navigate={navigate} onLogin={handleLogin} />;
     if (page === "forgot-password")
       return <ForgotPassword navigate={navigate} />;
     return <Landing navigate={navigate} />;
@@ -123,7 +124,7 @@ export default function App() {
       case "profile":
         return <Profile navigate={navigate} />;
       case "library":
-        return <Library navigate={navigate} />;
+        return <Library navigate={navigate} role={role} />;
       case "settings":
         return (
           <Settings

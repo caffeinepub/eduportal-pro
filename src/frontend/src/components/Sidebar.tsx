@@ -57,7 +57,6 @@ const navItems: NavItem[] = [
     label: "Library",
     page: "library",
     icon: <BookMarked size={18} />,
-    roles: ["student"],
   },
   {
     label: "Students",

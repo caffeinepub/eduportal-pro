@@ -9,7 +9,7 @@ import {
   ShieldCheck,
 } from "lucide-react";
 import { useState } from "react";
-import type { Page } from "../App";
+import type { Page, Role } from "../App";
 
 type RegRole = "student" | "teacher";
 type Step = "choose" | "form" | "otp";
@@ -101,7 +101,11 @@ function PasswordStrengthIndicator({ password }: { password: string }) {
 
 export default function Register({
   navigate,
-}: { navigate: (p: Page) => void }) {
+  onLogin,
+}: {
+  navigate: (p: Page) => void;
+  onLogin: (role: Role) => void;
+}) {
   const [step, setStep] = useState<Step>("choose");
   const [regRole, setRegRole] = useState<RegRole>("student");
 
@@ -215,7 +219,8 @@ export default function Register({
       localStorage.setItem("eduportal_user_branch", form.branch);
       localStorage.setItem("eduportal_user_semester", form.semester);
     }
-    navigate("dashboard");
+    // Call onLogin to update App state and navigate to dashboard
+    onLogin(regRole);
   };
 
   const inputCls =

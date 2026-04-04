@@ -752,17 +752,23 @@ function calcFine(issue: IssueRecord): number {
 }
 
 function getCurrentUser() {
-  const s = localStorage.getItem("currentUser");
-  return s ? JSON.parse(s) : { id: "u1", name: "Student", role: "student" };
+  const role = localStorage.getItem("eduportal_role") || "student";
+  const name = localStorage.getItem("eduportal_user_name") || "User";
+  const email = localStorage.getItem("eduportal_user_email") || "";
+  const id = email.replace(/[^a-z0-9]/gi, "") || "u1";
+  return { id, name, role };
 }
 
 // ── Main Component ─────────────────────────────────────────────────────────────
 export default function Library({
   navigate,
-}: { navigate: (page: Page) => void }) {
+  role: roleProp,
+}: { navigate: (page: Page) => void; role?: string }) {
   const user = getCurrentUser();
-  const isAdmin = user.role === "admin";
-  const isTeacher = user.role === "teacher";
+  // Allow role from prop (from App.tsx) to override localStorage for freshness
+  const effectiveRole = roleProp || user.role;
+  const isAdmin = effectiveRole === "admin";
+  const isTeacher = effectiveRole === "teacher";
   const maxBooks = isTeacher ? 5 : 3;
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 p-4 md:p-6">
